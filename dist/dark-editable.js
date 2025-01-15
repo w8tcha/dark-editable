@@ -1,12 +1,11 @@
-import './dark-editable.css';var u = Object.defineProperty;
-var m = (o, t, e) => t in o ? u(o, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : o[t] = e;
-var i = (o, t, e) => m(o, typeof t != "symbol" ? t + "" : t, e);
-import { Popover as x } from "bootstrap";
-import c from "moment";
-class a {
+import './dark-editable.css';var d = Object.defineProperty;
+var u = (r, t, e) => t in r ? d(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
+var o = (r, t, e) => u(r, typeof t != "symbol" ? t + "" : t, e);
+import { Popover as m } from "bootstrap";
+class h {
   constructor(t) {
-    i(this, "context");
-    if (this.constructor === a)
+    o(this, "context");
+    if (this.constructor === h)
       throw new Error("It's abstract class");
     this.context = t;
   }
@@ -37,13 +36,13 @@ class a {
     throw new Error("Method `hide` not define!");
   }
 }
-class f extends a {
+class x extends h {
   constructor() {
     super(...arguments);
-    i(this, "popover", null);
+    o(this, "popover", null);
   }
   init() {
-    this.popover = new x(this.context.element, {
+    this.popover = new m(this.context.element, {
       container: "body",
       content: this.context.typeElement.create(),
       html: !0,
@@ -78,7 +77,7 @@ class f extends a {
     this.popover && this.popover.hide();
   }
 }
-class v extends a {
+class f extends h {
   init() {
     const t = () => {
       if (!this.context.options.disabled) {
@@ -98,15 +97,15 @@ class v extends a {
     }, 100);
   }
 }
-class h {
+class a {
   constructor(t) {
-    i(this, "context");
-    i(this, "element", null);
-    i(this, "error", null);
-    i(this, "form", null);
-    i(this, "load", null);
-    i(this, "buttons", { success: null, cancel: null });
-    if (this.constructor === h)
+    o(this, "context");
+    o(this, "element", null);
+    o(this, "error", null);
+    o(this, "form", null);
+    o(this, "load", null);
+    o(this, "buttons", { success: null, cancel: null });
+    if (this.constructor === a)
       throw new Error("It's abstract class");
     this.context = t;
   }
@@ -123,17 +122,17 @@ class h {
   }
   createContainerForm() {
     const t = document.createElement("form");
-    return t.classList.add("d-flex", "align-items-start"), t.style.gap = "20px", t.addEventListener("submit", async (e) => {
+    return t.classList.add("d-flex", "align-items-start"), t.style.gap = "10px", t.addEventListener("submit", async (e) => {
       e.preventDefault();
       const s = this.getValue();
-      if (this.context.options.send && this.context.options.pk && this.context.options.url && this.context.value !== s) {
+      if (this.context.options.send && this.context.options.id && this.context.options.url && this.context.value !== s) {
         this.showLoad();
         let n;
         try {
-          const r = await this.ajax(s);
-          r.ok ? n = await this.context.success(r, s) : n = await this.context.error(r, s) || `${r.status} ${r.statusText}`;
-        } catch (r) {
-          console.error(r), n = r;
+          const i = await this.ajax(s);
+          i.ok ? n = await this.context.success(i, s) : n = await this.context.error(i, s) || `${i.status} ${i.statusText}`;
+        } catch (i) {
+          console.error(i), n = i;
         }
         n ? (this.setError(n), this.showError()) : (this.setError(""), this.hideError(), this.context.value = this.getValue(), this.context.modeElement.hide(), this.initText()), this.hideLoad();
       } else
@@ -149,17 +148,15 @@ class h {
   }
   createButton() {
     const t = document.createElement("button");
-    return t.type = "button", t.classList.add("btn", "btn-sm"), t.style.color = "transparent", t.style.textShadow = "0 0 0 white", t;
+    return t.type = "button", t.classList.add("btn", "btn-sm"), t;
   }
   createButtonSuccess() {
     const t = this.createButton();
-    return t.type = "submit", t.classList.add("btn-success"), t.innerHTML = "✔", t;
+    return t.type = "submit", t.classList.add("btn-success"), t.innerHTML = '<i class="fa-solid fa-check"></i>', t;
   }
   createButtonCancel() {
     const t = this.createButton();
-    t.classList.add("btn-danger");
-    const e = document.createElement("div");
-    return e.innerHTML = "✖", t.append(e), t.addEventListener("click", () => {
+    return t.classList.add("btn-danger"), t.innerHTML = '<i class="fa-solid fa-times"></i>', t.addEventListener("click", () => {
       this.context.modeElement.hide();
     }), t;
   }
@@ -174,16 +171,16 @@ class h {
     let e = this.context.options.url;
     if (!e)
       throw new Error("URL is required!");
-    if (!this.context.options.pk)
+    if (!this.context.options.id)
       throw new Error("pk is required!");
     if (!this.context.options.name)
       throw new Error("Name is required!");
     const s = new FormData();
-    if (s.append("pk", this.context.options.pk), s.append("name", this.context.options.name), s.append("value", t), ((n = this.context.options.ajaxOptions) == null ? void 0 : n.method) === "GET") {
-      const r = [];
-      s.forEach((p, d) => {
-        r.push(`${d}=${p}`);
-      }), e += "?" + r.join("&");
+    if (s.append("id", this.context.options.id), s.append("name", this.context.options.name), s.append("value", t), ((n = this.context.options.ajaxOptions) == null ? void 0 : n.method) === "GET") {
+      const i = [];
+      s.forEach((l, p) => {
+        i.push(`${p}=${l}`);
+      }), e += "?" + i.join("&");
     }
     return fetch(e, this.context.options.ajaxOptions);
   }
@@ -220,19 +217,19 @@ class h {
     return this.element ? this.element.value : "";
   }
 }
-class E extends h {
+class v extends a {
   create() {
     const t = this.createElement("input");
     return t.type = typeof this.context.options.type == "string" ? this.context.options.type : "text", this.createContainer(t);
   }
 }
-class w extends h {
+class E extends a {
   create() {
     const t = this.createElement("textarea");
     return this.createContainer(t);
   }
 }
-class y extends h {
+class w extends a {
   create() {
     const t = this.createElement("select");
     return this.context.options.source && Array.isArray(this.context.options.source) && this.context.options.source.forEach((e) => {
@@ -253,39 +250,39 @@ class y extends h {
     this.context.get_opt("source", []), this.context.options && typeof this.context.options.source == "string" && this.context.options.source !== "" && (this.context.options.source = JSON.parse(this.context.options.source));
   }
 }
-class l extends h {
+class c extends a {
   create() {
     const t = this.createElement("input");
     return t.type = "date", this.createContainer(t);
   }
   initText() {
-    return this.context.value === "" ? (this.context.element.innerHTML = this.context.options.emptytext || "", !0) : (this.context.element.innerHTML = c(this.context.value).format(this.context.options.viewformat), !1);
+    return this.context.value === "" ? (this.context.element.innerHTML = this.context.options.emptytext || "", !0) : (this.context.element.innerHTML = this.context.value, !1);
   }
   initOptions() {
     this.context.get_opt("format", "YYYY-MM-DD"), this.context.get_opt("viewformat", "YYYY-MM-DD");
   }
 }
-class b extends l {
+class y extends c {
   create() {
     const t = this.createElement("input");
     return t.type = "datetime-local", this.createContainer(t);
   }
   initOptions() {
-    this.context.get_opt("format", "YYYY-MM-DD HH:mm"), this.context.get_opt("viewformat", "YYYY-MM-DD HH:mm"), this.context.value = c(this.context.value).format("YYYY-MM-DDTHH:mm");
+    this.context.get_opt("format", "YYYY-MM-DD HH:mm"), this.context.get_opt("viewformat", "YYYY-MM-DD HH:mm"), this.context.value = this.context.value;
   }
 }
 /*!
  * DarkEditable.js
  * License: MIT
  */
-class T {
+class g {
   constructor(t, e = {}) {
-    i(this, "element");
-    i(this, "options");
-    i(this, "typeElement");
-    i(this, "modeElement");
-    i(this, "value", "");
-    this.element = t, this.options = { ...e }, this.init_options(), this.typeElement = this.route_type(), this.typeElement.initOptions(), this.modeElement = this.route_mode(), this.modeElement.init(), this.init_text(), this.init_style(), this.options.disabled && this.disable(), this.element.dispatchEvent(new CustomEvent("init"));
+    o(this, "element");
+    o(this, "options");
+    o(this, "typeElement");
+    o(this, "modeElement");
+    o(this, "value", "");
+    this.element = t, this.options = { ...e }, this.init_options(), this.typeElement = this.route_type(), this.typeElement.initOptions(), this.modeElement = this.route_mode(), this.modeElement.init(), this.setValue(this.element.innerHTML), this.init_style(), this.options.disabled && this.disable(), this.element.dispatchEvent(new CustomEvent("init"));
   }
   /* INIT METHODS */
   get_opt(t, e) {
@@ -306,11 +303,12 @@ class T {
     }
   }
   init_options() {
-    var t, e, s, n;
-    this.get_opt("value", this.element.innerHTML), this.get_opt("name", this.element.id), this.get_opt("pk", null), this.get_opt("title", ""), this.get_opt("type", "text"), this.get_opt("emptytext", "Empty"), this.get_opt("mode", "popup"), this.get_opt("url", null), this.get_opt("ajaxOptions", {}), this.options.ajaxOptions = Object.assign({
+    var t, e, s, n, i;
+    this.get_opt("value", this.element.innerHTML), this.get_opt("name", this.element.id), this.get_opt("id", null), this.get_opt("title", ""), this.get_opt("type", "text"), this.get_opt("emptytext", "Empty"), this.get_opt("mode", "popup"), this.get_opt("url", null), this.get_opt("ajaxOptions", {}), this.options.ajaxOptions = Object.assign({
       method: "POST",
-      dataType: "text"
-    }, this.options.ajaxOptions), this.get_opt_bool("send", !0), this.get_opt_bool("disabled", !1), this.get_opt_bool("required", !1), this.get_opt_bool("showbuttons", !0), (t = this.options) != null && t.success && typeof ((e = this.options) == null ? void 0 : e.success) == "function" && (this.success = this.options.success), (s = this.options) != null && s.error && typeof ((n = this.options) == null ? void 0 : n.error) == "function" && (this.error = this.options.error);
+      dataType: "text",
+      RequestVerificationToken: (t = document.querySelector('input[name="__RequestVerificationToken"]')) == null ? void 0 : t.value
+    }, this.options.ajaxOptions), this.get_opt_bool("send", !0), this.get_opt_bool("disabled", !1), this.get_opt_bool("required", !1), this.get_opt_bool("showbuttons", !0), (e = this.options) != null && e.success && typeof ((s = this.options) == null ? void 0 : s.success) == "function" && (this.success = this.options.success), (n = this.options) != null && n.error && typeof ((i = this.options) == null ? void 0 : i.error) == "function" && (this.error = this.options.error);
   }
   init_text() {
     const t = "dark-editable-element-empty";
@@ -325,9 +323,9 @@ class T {
       default:
         throw new Error(`Mode ${this.options.mode} not found!`);
       case "popup":
-        return new f(this);
+        return new x(this);
       case "inline":
-        return new v(this);
+        return new f(this);
     }
   }
   route_type() {
@@ -342,15 +340,15 @@ class T {
       case "number":
       case "range":
       case "time":
-        return new E(this);
+        return new v(this);
       case "textarea":
-        return new w(this);
+        return new E(this);
       case "select":
-        return new y(this);
+        return new w(this);
       case "date":
-        return new l(this);
+        return new c(this);
       case "datetime":
-        return new b(this);
+        return new y(this);
     }
     throw new Error("Undefined type");
   }
@@ -378,6 +376,6 @@ class T {
   /* METHODS END */
 }
 export {
-  T as default
+  g as default
 };
 //# sourceMappingURL=dark-editable.js.map

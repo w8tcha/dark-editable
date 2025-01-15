@@ -31,7 +31,7 @@ export default class DarkEditable{
         this.typeElement.initOptions();
         this.modeElement = this.route_mode();
         this.modeElement.init();
-        this.init_text();
+        this.setValue(this.element.innerHTML);
         this.init_style();
         if(this.options.disabled){
             this.disable();
@@ -71,10 +71,10 @@ export default class DarkEditable{
 
     init_options(): void
     {
-        //priority date elements
+		//priority date elements
         this.get_opt("value", this.element.innerHTML);
         this.get_opt("name", this.element.id);
-        this.get_opt("pk", null);
+        this.get_opt("id", null);
         this.get_opt("title", "");
         this.get_opt("type", "text");
         this.get_opt("emptytext", "Empty");
@@ -84,6 +84,7 @@ export default class DarkEditable{
         this.options.ajaxOptions = Object.assign({
             method: "POST",
             dataType: "text",
+			"RequestVerificationToken": (document.querySelector('input[name="__RequestVerificationToken"]') as HTMLInputElement)?.value,
         }, this.options.ajaxOptions);
         this.get_opt_bool("send", true);
         this.get_opt_bool("disabled", false);

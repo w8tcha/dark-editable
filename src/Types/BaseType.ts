@@ -53,11 +53,11 @@ export default class BaseType{
     {
         const form = document.createElement(`form`);
         form.classList.add("d-flex", "align-items-start");
-        form.style.gap = "20px";
+        form.style.gap = "10px";
         form.addEventListener('submit', async e => {
             e.preventDefault();
             const newValue = this.getValue();
-            if(this.context.options.send && this.context.options.pk && this.context.options.url && (this.context.value !== newValue)){
+            if(this.context.options.send && this.context.options.id && this.context.options.url && (this.context.value !== newValue)){
                 this.showLoad();
                 let msg;
                 try {
@@ -114,8 +114,6 @@ export default class BaseType{
         const button = document.createElement("button");
         button.type = "button";
         button.classList.add("btn", "btn-sm");
-        button.style.color = "transparent";
-        button.style.textShadow = "0 0 0 white";
         return button;
     }
 
@@ -124,7 +122,7 @@ export default class BaseType{
         const btn_success = this.createButton();
         btn_success.type = "submit";
         btn_success.classList.add("btn-success");
-        btn_success.innerHTML = "✔";
+        btn_success.innerHTML = '<i class="fa-solid fa-check"></i>';
         return btn_success;
     }
 
@@ -132,9 +130,7 @@ export default class BaseType{
     {
         const btn_cancel = this.createButton();
         btn_cancel.classList.add("btn-danger");
-        const div = document.createElement("div");
-        div.innerHTML = "✖";
-        btn_cancel.append(div);
+        btn_cancel.innerHTML = '<i class="fa-solid fa-times"></i>';
         btn_cancel.addEventListener("click", () => {
             this.context.modeElement.hide();
         });
@@ -161,16 +157,17 @@ export default class BaseType{
         if(!url){
             throw new Error("URL is required!");
         }
-        if(!this.context.options.pk){
+        if(!this.context.options.id){
             throw new Error("pk is required!");
         }
         if(!this.context.options.name){
             throw new Error("Name is required!");
         }
         const form = new FormData;
-        form.append("pk", this.context.options.pk);
+        form.append("id", this.context.options.id);
         form.append("name", this.context.options.name);
         form.append("value", new_value);
+
         if(this.context.options.ajaxOptions?.method === "GET"){
             const params: [string?] = [];
             form.forEach((value, key) => {

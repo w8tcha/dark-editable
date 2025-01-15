@@ -2,7 +2,7 @@ import { default as BaseType } from '../Types/BaseType.ts';
 export default interface Options {
     value?: string;
     name?: string;
-    pk?: string;
+    id?: string;
     title?: string;
     type?: BaseType | string;
     ajaxOptions?: RequestInit;

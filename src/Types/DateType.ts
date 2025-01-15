@@ -1,5 +1,4 @@
 import BaseType from "./BaseType.js";
-import moment from "moment";
 
 export default class DateType extends BaseType{
     create(){
@@ -11,11 +10,11 @@ export default class DateType extends BaseType{
 
     initText(): boolean
     {
-        if(this.context.value === ""){
+		if(this.context.value === ""){
             this.context.element.innerHTML = this.context.options.emptytext || "";
             return true;
         } else {
-            this.context.element.innerHTML = moment(this.context.value).format(this.context.options.viewformat);
+            this.context.element.innerHTML = this.context.value;
             return false;
         }
     }

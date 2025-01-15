@@ -5,7 +5,7 @@ import dts from 'vite-plugin-dts'
 export default defineConfig({
   plugins: [
       libInjectCss(),
-      dts(),
+      dts()
   ],
   build: {
     lib: {
@@ -14,17 +14,16 @@ export default defineConfig({
       name: 'DarkEditable',
       // the proper extensions will be added
       fileName: 'dark-editable',
-      formats: ['es', 'iife', 'umd'],
+      formats: ['es', 'iife', 'umd']
     },
     rollupOptions: {
-      external: ['bootstrap', 'moment'],
+      external: ['bootstrap'],
       output: {
         globals: {
-          bootstrap: 'bootstrap',
-          moment: 'moment',
+          bootstrap: 'bootstrap'
         }
       }
     },
     sourcemap: true
-  },
+  }
 });

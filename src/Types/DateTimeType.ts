@@ -1,5 +1,4 @@
 import DateType from "./DateType.js";
-import moment from "moment";
 
 export default class DateTimeType extends DateType{
     create(){
@@ -13,6 +12,6 @@ export default class DateTimeType extends DateType{
     {
         this.context.get_opt("format", "YYYY-MM-DD HH:mm");
         this.context.get_opt("viewformat", "YYYY-MM-DD HH:mm");
-        this.context.value = moment(this.context.value).format("YYYY-MM-DDTHH:mm");
+        this.context.value = this.context.value;
     }
 }

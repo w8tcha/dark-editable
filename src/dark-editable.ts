@@ -78,6 +78,7 @@ export default class DarkEditable{
         this.get_opt("title", "");
         this.get_opt("type", "text");
         this.get_opt("emptytext", "Empty");
+        this.get_opt("placeholder", this.element.getAttribute("placeholder"));
         this.get_opt("mode", "popup");
         this.get_opt("url", null);
         this.get_opt("ajaxOptions", {});

@@ -10,6 +10,7 @@ export default interface Options {
     send?: boolean;
     mode?: 'popup' | 'inline';
     emptytext?: string;
+    placeholder?: string;
     url?: string | null;
     required?: boolean;
     showbuttons?: boolean;

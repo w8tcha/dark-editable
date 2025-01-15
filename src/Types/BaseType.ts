@@ -216,6 +216,9 @@ export default class BaseType{
         if(this.context.options.required){
             element.required = this.context.options.required;
         }
+		if(this.context.options.placeholder){
+            element.placeholder = this.context.options.placeholder;
+        }
         if(!this.context.options.showbuttons){
             element.addEventListener('change', () => {
                 if(this.form){

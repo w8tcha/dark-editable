@@ -2,10 +2,10 @@ import './dark-editable.css';var d = Object.defineProperty;
 var u = (r, t, e) => t in r ? d(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
 var o = (r, t, e) => u(r, typeof t != "symbol" ? t + "" : t, e);
 import { Popover as m } from "bootstrap";
-class h {
+class a {
   constructor(t) {
     o(this, "context");
-    if (this.constructor === h)
+    if (this.constructor === a)
       throw new Error("It's abstract class");
     this.context = t;
   }
@@ -36,7 +36,7 @@ class h {
     throw new Error("Method `hide` not define!");
   }
 }
-class x extends h {
+class x extends a {
   constructor() {
     super(...arguments);
     o(this, "popover", null);
@@ -77,7 +77,7 @@ class x extends h {
     this.popover && this.popover.hide();
   }
 }
-class f extends h {
+class f extends a {
   init() {
     const t = () => {
       if (!this.context.options.disabled) {
@@ -97,7 +97,7 @@ class f extends h {
     }, 100);
   }
 }
-class a {
+class h {
   constructor(t) {
     o(this, "context");
     o(this, "element", null);
@@ -105,7 +105,7 @@ class a {
     o(this, "form", null);
     o(this, "load", null);
     o(this, "buttons", { success: null, cancel: null });
-    if (this.constructor === a)
+    if (this.constructor === h)
       throw new Error("It's abstract class");
     this.context = t;
   }
@@ -199,7 +199,7 @@ class a {
   }
   createElement(t) {
     const e = document.createElement(t);
-    return e.classList.add("form-control"), this.context.options.required && (e.required = this.context.options.required), this.context.options.showbuttons || e.addEventListener("change", () => {
+    return e.classList.add("form-control"), this.context.options.required && (e.required = this.context.options.required), this.context.options.placeholder && (e.placeholder = this.context.options.placeholder), this.context.options.showbuttons || e.addEventListener("change", () => {
       this.form && this.form.dispatchEvent(new Event("submit"));
     }), this.add_focus(e), e;
   }
@@ -217,19 +217,19 @@ class a {
     return this.element ? this.element.value : "";
   }
 }
-class v extends a {
+class v extends h {
   create() {
     const t = this.createElement("input");
     return t.type = typeof this.context.options.type == "string" ? this.context.options.type : "text", this.createContainer(t);
   }
 }
-class E extends a {
+class E extends h {
   create() {
     const t = this.createElement("textarea");
     return this.createContainer(t);
   }
 }
-class w extends a {
+class w extends h {
   create() {
     const t = this.createElement("select");
     return this.context.options.source && Array.isArray(this.context.options.source) && this.context.options.source.forEach((e) => {
@@ -250,7 +250,7 @@ class w extends a {
     this.context.get_opt("source", []), this.context.options && typeof this.context.options.source == "string" && this.context.options.source !== "" && (this.context.options.source = JSON.parse(this.context.options.source));
   }
 }
-class c extends a {
+class c extends h {
   create() {
     const t = this.createElement("input");
     return t.type = "date", this.createContainer(t);
@@ -304,7 +304,7 @@ class g {
   }
   init_options() {
     var t, e, s, n, i;
-    this.get_opt("value", this.element.innerHTML), this.get_opt("name", this.element.id), this.get_opt("id", null), this.get_opt("title", ""), this.get_opt("type", "text"), this.get_opt("emptytext", "Empty"), this.get_opt("mode", "popup"), this.get_opt("url", null), this.get_opt("ajaxOptions", {}), this.options.ajaxOptions = Object.assign({
+    this.get_opt("value", this.element.innerHTML), this.get_opt("name", this.element.id), this.get_opt("id", null), this.get_opt("title", ""), this.get_opt("type", "text"), this.get_opt("emptytext", "Empty"), this.get_opt("placeholder", this.element.getAttribute("placeholder")), this.get_opt("mode", "popup"), this.get_opt("url", null), this.get_opt("ajaxOptions", {}), this.options.ajaxOptions = Object.assign({
       method: "POST",
       dataType: "text",
       RequestVerificationToken: (t = document.querySelector('input[name="__RequestVerificationToken"]')) == null ? void 0 : t.value

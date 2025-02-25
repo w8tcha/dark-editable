@@ -12,6 +12,6 @@ export default class DateTimeType extends DateType{
     {
         this.context.get_opt("format", "YYYY-MM-DD HH:mm");
         this.context.get_opt("viewformat", "YYYY-MM-DD HH:mm");
-        this.context.value = this.context.value;
+        this.context.setValue(this.context.getValue());
     }
 }

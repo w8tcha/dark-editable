@@ -1,10 +1,10 @@
-import './dark-editable.css';var d = Object.defineProperty;
-var u = (r, t, e) => t in r ? d(r, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : r[t] = e;
-var o = (r, t, e) => u(r, typeof t != "symbol" ? t + "" : t, e);
-import { Popover as m } from "bootstrap";
+import './dark-editable.css';var u = Object.defineProperty;
+var m = (o, t, e) => t in o ? u(o, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : o[t] = e;
+var r = (o, t, e) => m(o, typeof t != "symbol" ? t + "" : t, e);
+import { Popover as x } from "bootstrap";
 class a {
   constructor(t) {
-    o(this, "context");
+    r(this, "context");
     if (this.constructor === a)
       throw new Error("It's abstract class");
     this.context = t;
@@ -12,7 +12,7 @@ class a {
   event_show() {
     if (this.context.typeElement.hideError(), !this.context.typeElement.element)
       throw new Error("Element is missing!");
-    this.context.typeElement.element.value = this.context.value, this.context.element.dispatchEvent(new CustomEvent("show"));
+    this.context.typeElement.element.value = this.context.getValue(), this.context.element.dispatchEvent(new CustomEvent("show"));
   }
   event_shown() {
     this.context.element.dispatchEvent(new CustomEvent("shown"));
@@ -36,13 +36,13 @@ class a {
     throw new Error("Method `hide` not define!");
   }
 }
-class x extends a {
+class f extends a {
   constructor() {
     super(...arguments);
-    o(this, "popover", null);
+    r(this, "popover", null);
   }
   init() {
-    this.popover = new m(this.context.element, {
+    this.popover = new x(this.context.element, {
       container: "body",
       content: this.context.typeElement.create(),
       html: !0,
@@ -77,7 +77,7 @@ class x extends a {
     this.popover && this.popover.hide();
   }
 }
-class f extends a {
+class E extends a {
   init() {
     const t = () => {
       if (!this.context.options.disabled) {
@@ -92,19 +92,19 @@ class f extends a {
   disable() {
   }
   hide() {
-    this.event_hide(), this.context.element.innerHTML = this.context.value, setTimeout(() => {
+    this.event_hide(), this.context.element.innerHTML = this.context.getValue(), setTimeout(() => {
       this.init(), this.event_hidden();
     }, 100);
   }
 }
 class h {
   constructor(t) {
-    o(this, "context");
-    o(this, "element", null);
-    o(this, "error", null);
-    o(this, "form", null);
-    o(this, "load", null);
-    o(this, "buttons", { success: null, cancel: null });
+    r(this, "context");
+    r(this, "element", null);
+    r(this, "error", null);
+    r(this, "form", null);
+    r(this, "load", null);
+    r(this, "buttons", { success: null, cancel: null });
     if (this.constructor === h)
       throw new Error("It's abstract class");
     this.context = t;
@@ -125,7 +125,7 @@ class h {
     return t.classList.add("d-flex", "align-items-start"), t.style.gap = "10px", t.addEventListener("submit", async (e) => {
       e.preventDefault();
       const s = this.getValue();
-      if (this.context.options.send && this.context.options.id && this.context.options.url && this.context.value !== s) {
+      if (this.context.options.send && this.context.options.id && this.context.options.url && this.context.getValue() !== s) {
         this.showLoad();
         let n;
         try {
@@ -134,9 +134,9 @@ class h {
         } catch (i) {
           console.error(i), n = i;
         }
-        n ? (this.setError(n), this.showError()) : (this.setError(""), this.hideError(), this.context.value = this.getValue(), this.context.modeElement.hide(), this.initText()), this.hideLoad();
+        n ? (this.setError(n), this.showError()) : (this.setError(""), this.hideError(), this.context.setValue(this.getValue()), this.context.modeElement.hide(), this.initText()), this.hideLoad();
       } else
-        this.context.value = this.getValue(), this.context.modeElement.hide(), this.initText();
+        this.context.setValue(this.getValue()), this.context.modeElement.hide(), this.initText();
       this.context.element.dispatchEvent(new CustomEvent("save"));
     }), t;
   }
@@ -167,7 +167,7 @@ class h {
     this.load && (this.load.style.display = "block");
   }
   ajax(t) {
-    var n;
+    var i;
     let e = this.context.options.url;
     if (!e)
       throw new Error("URL is required!");
@@ -176,13 +176,14 @@ class h {
     if (!this.context.options.name)
       throw new Error("Name is required!");
     const s = new FormData();
-    if (s.append("id", this.context.options.id), s.append("name", this.context.options.name), s.append("value", t), ((n = this.context.options.ajaxOptions) == null ? void 0 : n.method) === "GET") {
-      const i = [];
-      s.forEach((l, p) => {
-        i.push(`${p}=${l}`);
-      }), e += "?" + i.join("&");
+    if (s.append("id", this.context.options.id), s.append("name", this.context.options.name), s.append("value", t), ((i = this.context.options.ajaxOptions) == null ? void 0 : i.method) === "GET") {
+      const c = [];
+      s.forEach((p, d) => {
+        c.push(`${d}=${p}`);
+      }), e += "?" + c.join("&");
     }
-    return fetch(e, this.context.options.ajaxOptions);
+    const n = { ...this.context.options.ajaxOptions };
+    return n.body = s, fetch(e, n);
   }
   async successResponse(t, e) {
   }
@@ -209,7 +210,7 @@ class h {
     });
   }
   initText() {
-    return this.context.value === "" ? (this.context.element.innerHTML = this.context.options.emptytext || "", !0) : (this.context.element.innerHTML = this.context.value, !1);
+    return this.context.getValue() === "" ? (this.context.element.innerHTML = this.context.options.emptytext || "", !0) : (this.context.element.innerHTML = this.context.getValue(), !1);
   }
   initOptions() {
   }
@@ -217,19 +218,19 @@ class h {
     return this.element ? this.element.value : "";
   }
 }
-class v extends h {
+class y extends h {
   create() {
     const t = this.createElement("input");
     return t.type = typeof this.context.options.type == "string" ? this.context.options.type : "text", this.createContainer(t);
   }
 }
-class E extends h {
+class w extends h {
   create() {
     const t = this.createElement("textarea");
     return this.createContainer(t);
   }
 }
-class w extends h {
+class v extends h {
   create() {
     const t = this.createElement("select");
     return this.context.options.source && Array.isArray(this.context.options.source) && this.context.options.source.forEach((e) => {
@@ -238,10 +239,10 @@ class w extends h {
     }), this.createContainer(t);
   }
   initText() {
-    if (this.context.element.innerHTML = this.context.options.emptytext || "", this.context.value !== "" && this.context.options.source && Array.isArray(this.context.options.source) && this.context.options.source.length > 0)
+    if (this.context.element.innerHTML = this.context.options.emptytext || "", this.context.getValue() !== "" && this.context.options.source && Array.isArray(this.context.options.source) && this.context.options.source.length > 0)
       for (let t = 0; t < this.context.options.source.length; t++) {
         const e = this.context.options.source[t];
-        if (e.value == this.context.value)
+        if (e.value == this.context.getValue())
           return this.context.element.innerHTML = e.text, !1;
       }
     return !0;
@@ -250,38 +251,37 @@ class w extends h {
     this.context.get_opt("source", []), this.context.options && typeof this.context.options.source == "string" && this.context.options.source !== "" && (this.context.options.source = JSON.parse(this.context.options.source));
   }
 }
-class c extends h {
+class l extends h {
   create() {
     const t = this.createElement("input");
     return t.type = "date", this.createContainer(t);
   }
   initText() {
-    return this.context.value === "" ? (this.context.element.innerHTML = this.context.options.emptytext || "", !0) : (this.context.element.innerHTML = this.context.value, !1);
+    return this.context.getValue() === "" ? (this.context.element.innerHTML = this.context.options.emptytext || "", !0) : (this.context.element.innerHTML = this.context.getValue(), !1);
   }
   initOptions() {
     this.context.get_opt("format", "YYYY-MM-DD"), this.context.get_opt("viewformat", "YYYY-MM-DD");
   }
 }
-class y extends c {
+class b extends l {
   create() {
     const t = this.createElement("input");
     return t.type = "datetime-local", this.createContainer(t);
   }
   initOptions() {
-    this.context.get_opt("format", "YYYY-MM-DD HH:mm"), this.context.get_opt("viewformat", "YYYY-MM-DD HH:mm"), this.context.value = this.context.value;
+    this.context.get_opt("format", "YYYY-MM-DD HH:mm"), this.context.get_opt("viewformat", "YYYY-MM-DD HH:mm"), this.context.setValue(this.context.getValue());
   }
 }
 /*!
  * DarkEditable.js
  * License: MIT
  */
-class g {
+class L {
   constructor(t, e = {}) {
-    o(this, "element");
-    o(this, "options");
-    o(this, "typeElement");
-    o(this, "modeElement");
-    o(this, "value", "");
+    r(this, "element");
+    r(this, "options");
+    r(this, "typeElement");
+    r(this, "modeElement");
     this.element = t, this.options = { ...e }, this.init_options(), this.typeElement = this.route_type(), this.typeElement.initOptions(), this.modeElement = this.route_mode(), this.modeElement.init(), this.setValue(this.element.innerHTML), this.init_style(), this.options.disabled && this.disable(), this.element.dispatchEvent(new CustomEvent("init"));
   }
   /* INIT METHODS */
@@ -323,9 +323,9 @@ class g {
       default:
         throw new Error(`Mode ${this.options.mode} not found!`);
       case "popup":
-        return new x(this);
-      case "inline":
         return new f(this);
+      case "inline":
+        return new E(this);
     }
   }
   route_type() {
@@ -340,15 +340,15 @@ class g {
       case "number":
       case "range":
       case "time":
-        return new v(this);
-      case "textarea":
-        return new E(this);
-      case "select":
-        return new w(this);
-      case "date":
-        return new c(this);
-      case "datetime":
         return new y(this);
+      case "textarea":
+        return new w(this);
+      case "select":
+        return new v(this);
+      case "date":
+        return new l(this);
+      case "datetime":
+        return new b(this);
     }
     throw new Error("Undefined type");
   }
@@ -368,14 +368,14 @@ class g {
     this.options.disabled = !0, this.element.classList.add("dark-editable-element-disabled"), this.modeElement.enable();
   }
   setValue(t) {
-    this.value = t, this.init_text();
+    this.options.value = t, this.init_text();
   }
   getValue() {
-    return this.value;
+    return this.options.value ?? "";
   }
   /* METHODS END */
 }
 export {
-  g as default
+  L as default
 };
 //# sourceMappingURL=dark-editable.js.map

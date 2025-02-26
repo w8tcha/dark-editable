@@ -307,7 +307,9 @@ class L {
     this.get_opt("value", this.element.innerHTML), this.get_opt("name", this.element.id), this.get_opt("id", null), this.get_opt("title", ""), this.get_opt("type", "text"), this.get_opt("emptytext", "Empty"), this.get_opt("placeholder", this.element.getAttribute("placeholder")), this.get_opt("mode", "popup"), this.get_opt("url", null), this.get_opt("ajaxOptions", {}), this.options.ajaxOptions = Object.assign({
       method: "POST",
       dataType: "text",
-      RequestVerificationToken: (t = document.querySelector('input[name="__RequestVerificationToken"]')) == null ? void 0 : t.value
+      headers: {
+        RequestVerificationToken: (t = document.querySelector('input[name="__RequestVerificationToken"]')) == null ? void 0 : t.value
+      }
     }, this.options.ajaxOptions), this.get_opt_bool("send", !0), this.get_opt_bool("disabled", !1), this.get_opt_bool("required", !1), this.get_opt_bool("showbuttons", !0), (e = this.options) != null && e.success && typeof ((s = this.options) == null ? void 0 : s.success) == "function" && (this.success = this.options.success), (n = this.options) != null && n.error && typeof ((i = this.options) == null ? void 0 : i.error) == "function" && (this.error = this.options.error);
   }
   init_text() {

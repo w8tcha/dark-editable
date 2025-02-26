@@ -70,6 +70,7 @@ export default class DarkEditable{
 
     init_options(): void
     {
+		
 		//priority date elements
         this.get_opt("value", this.element.innerHTML);
         this.get_opt("name", this.element.id);
@@ -84,7 +85,9 @@ export default class DarkEditable{
         this.options.ajaxOptions = Object.assign({
             method: "POST",
             dataType: "text",
-			"RequestVerificationToken": (document.querySelector('input[name="__RequestVerificationToken"]') as HTMLInputElement)?.value,
+			headers: {
+				RequestVerificationToken: (document.querySelector('input[name="__RequestVerificationToken"]') as HTMLInputElement)?.value
+			}
         }, this.options.ajaxOptions);
         this.get_opt_bool("send", true);
         this.get_opt_bool("disabled", false);

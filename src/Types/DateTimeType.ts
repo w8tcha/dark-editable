@@ -10,8 +10,8 @@ export default class DateTimeType extends DateType{
 
     initOptions(): void
     {
-        this.context.get_opt("format", "YYYY-MM-DD HH:mm");
-        this.context.get_opt("viewformat", "YYYY-MM-DD HH:mm");
-        this.context.setValue(this.context.getValue());
+	    //const format = this.context.get_opt("format", "YYYY-MM-DD HH:mm");
+	    //const viewformat = this.context.get_opt("viewformat", "YYYY-MM-DD HH:mm");
+	    this.context.setValue(this.context.getValue());
     }
 }

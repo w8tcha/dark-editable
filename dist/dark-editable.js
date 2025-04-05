@@ -230,7 +230,7 @@ class w extends h {
     return this.createContainer(t);
   }
 }
-class v extends h {
+class b extends h {
   create() {
     const t = this.createElement("select");
     return this.context.options.source && Array.isArray(this.context.options.source) && this.context.options.source.forEach((e) => {
@@ -260,16 +260,16 @@ class l extends h {
     return this.context.getValue() === "" ? (this.context.element.innerHTML = this.context.options.emptytext || "", !0) : (this.context.element.innerHTML = this.context.getValue(), !1);
   }
   initOptions() {
-    this.context.get_opt("format", "YYYY-MM-DD"), this.context.get_opt("viewformat", "YYYY-MM-DD");
+    this.context.setValue(this.context.getValue());
   }
 }
-class b extends l {
+class v extends l {
   create() {
     const t = this.createElement("input");
     return t.type = "datetime-local", this.createContainer(t);
   }
   initOptions() {
-    this.context.get_opt("format", "YYYY-MM-DD HH:mm"), this.context.get_opt("viewformat", "YYYY-MM-DD HH:mm"), this.context.setValue(this.context.getValue());
+    this.context.setValue(this.context.getValue());
   }
 }
 /*!
@@ -287,7 +287,7 @@ class L {
   /* INIT METHODS */
   get_opt(t, e) {
     var s, n;
-    this.options[t] = ((s = this.element.dataset) == null ? void 0 : s[t]) ?? ((n = this.options) == null ? void 0 : n[t]) ?? e;
+    return this.options[t] = ((s = this.element.dataset) == null ? void 0 : s[t]) ?? ((n = this.options) == null ? void 0 : n[t]) ?? e;
   }
   get_opt_bool(t, e) {
     if (this.get_opt(t, e), typeof this.options[t] != "boolean") {
@@ -346,11 +346,11 @@ class L {
       case "textarea":
         return new w(this);
       case "select":
-        return new v(this);
+        return new b(this);
       case "date":
         return new l(this);
       case "datetime":
-        return new b(this);
+        return new v(this);
     }
     throw new Error("Undefined type");
   }

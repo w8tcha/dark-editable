@@ -20,7 +20,7 @@ export default defineConfig({
       external: ['bootstrap'],
       output: {
         globals: {
-          bootstrap: 'bootstrap'
+              bootstrap: 'bootstrap'
         }
       }
     },

@@ -15,8 +15,7 @@
     "require": "./dist/dark-editable.umd.cjs"
   },
   "peerDependencies": {
-    "bootstrap": "^5.3",
-    "moment": "^2.30.1"
+    "bootstrap": "^5.3"
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.10",

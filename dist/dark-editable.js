@@ -2,10 +2,10 @@ import './dark-editable.css';var u = Object.defineProperty;
 var m = (o, t, e) => t in o ? u(o, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : o[t] = e;
 var r = (o, t, e) => m(o, typeof t != "symbol" ? t + "" : t, e);
 import { Popover as x } from "bootstrap";
-class a {
+class h {
   constructor(t) {
     r(this, "context");
-    if (this.constructor === a)
+    if (this.constructor === h)
       throw new Error("It's abstract class");
     this.context = t;
   }
@@ -36,7 +36,7 @@ class a {
     throw new Error("Method `hide` not define!");
   }
 }
-class f extends a {
+class f extends h {
   constructor() {
     super(...arguments);
     r(this, "popover", null);
@@ -77,7 +77,7 @@ class f extends a {
     this.popover && this.popover.hide();
   }
 }
-class E extends a {
+class E extends h {
   init() {
     const t = () => {
       if (!this.context.options.disabled) {
@@ -97,7 +97,7 @@ class E extends a {
     }, 100);
   }
 }
-class h {
+class a {
   constructor(t) {
     r(this, "context");
     r(this, "element", null);
@@ -105,7 +105,7 @@ class h {
     r(this, "form", null);
     r(this, "load", null);
     r(this, "buttons", { success: null, cancel: null });
-    if (this.constructor === h)
+    if (this.constructor === a)
       throw new Error("It's abstract class");
     this.context = t;
   }
@@ -218,19 +218,40 @@ class h {
     return this.element ? this.element.value : "";
   }
 }
-class y extends h {
+class y extends a {
   create() {
     const t = this.createElement("input");
-    return t.type = typeof this.context.options.type == "string" ? this.context.options.type : "text", this.createContainer(t);
+    t.type = typeof this.context.options.type == "string" ? this.context.options.type : "text";
+    const { options: e = {} } = this.context;
+    t.type = typeof e.type == "string" ? e.type : "text";
+    const s = e.attributes || {}, n = [
+      "step",
+      "min",
+      "max",
+      "minlength",
+      "maxlength",
+      "pattern",
+      "placeholder",
+      "required",
+      "readonly",
+      "disabled",
+      "autocomplete",
+      "autofocus",
+      "name",
+      "value"
+    ];
+    for (const [i, c] of Object.entries(s))
+      n.includes(i) && c !== void 0 && t.setAttribute(i, String(c));
+    return this.createContainer(t);
   }
 }
-class w extends h {
+class b extends a {
   create() {
     const t = this.createElement("textarea");
     return this.createContainer(t);
   }
 }
-class b extends h {
+class v extends a {
   create() {
     const t = this.createElement("select");
     return this.context.options.source && Array.isArray(this.context.options.source) && this.context.options.source.forEach((e) => {
@@ -251,19 +272,20 @@ class b extends h {
     this.context.get_opt("source", []), this.context.options && typeof this.context.options.source == "string" && this.context.options.source !== "" && (this.context.options.source = JSON.parse(this.context.options.source));
   }
 }
-class l extends h {
+class l extends a {
   create() {
     const t = this.createElement("input");
     return t.type = "date", this.createContainer(t);
   }
   initText() {
-    return this.context.getValue() === "" ? (this.context.element.innerHTML = this.context.options.emptytext || "", !0) : (this.context.element.innerHTML = this.context.getValue(), !1);
+    const t = this.context.getValue();
+    return t === "" ? (this.context.element.innerHTML = this.context.options.emptytext || "", !0) : (this.context.element.innerHTML = t, !1);
   }
   initOptions() {
     this.context.setValue(this.context.getValue());
   }
 }
-class v extends l {
+class w extends l {
   create() {
     const t = this.createElement("input");
     return t.type = "datetime-local", this.createContainer(t);
@@ -310,7 +332,7 @@ class L {
       headers: {
         RequestVerificationToken: (t = document.querySelector('input[name="__RequestVerificationToken"]')) == null ? void 0 : t.value
       }
-    }, this.options.ajaxOptions), this.get_opt_bool("send", !0), this.get_opt_bool("disabled", !1), this.get_opt_bool("required", !1), this.get_opt_bool("showbuttons", !0), (e = this.options) != null && e.success && typeof ((s = this.options) == null ? void 0 : s.success) == "function" && (this.success = this.options.success), (n = this.options) != null && n.error && typeof ((i = this.options) == null ? void 0 : i.error) == "function" && (this.error = this.options.error);
+    }, this.options.ajaxOptions), this.get_opt_bool("send", !0), this.get_opt_bool("disabled", !1), this.get_opt_bool("required", !1), this.get_opt_bool("showbuttons", !0), (e = this.options) != null && e.success && typeof ((s = this.options) == null ? void 0 : s.success) == "function" && (this.success = this.options.success), (n = this.options) != null && n.error && typeof ((i = this.options) == null ? void 0 : i.error) == "function" && (this.error = this.options.error), this.get_opt("attributes", {});
   }
   init_text() {
     const t = "dark-editable-element-empty";
@@ -344,13 +366,13 @@ class L {
       case "time":
         return new y(this);
       case "textarea":
-        return new w(this);
-      case "select":
         return new b(this);
+      case "select":
+        return new v(this);
       case "date":
         return new l(this);
       case "datetime":
-        return new v(this);
+        return new w(this);
     }
     throw new Error("Undefined type");
   }

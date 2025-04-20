@@ -1,7 +1,7 @@
 # Getting started
 It is an alternative to [x-editable](https://github.com/vitalets/x-editable). Written in pure JavaScript.
 
-Heres a quick demo on [jfiddle](https://jsfiddle.net/YohnJohn/c3t1avrp/40/) to give you some examole of how it works.
+Here's a quick demo on [jfiddle](https://jsfiddle.net/DarKsandr/8zfd32jp/) to give you some example of how it works.
 
 
 ## Quick start
@@ -193,4 +193,18 @@ HTML5 input types. Following types are supported:
 
 | Name        | Type   | Default | Description                                                |
 | ----------- | ------ | ------- | ---------------------------------------------------------- |
-| placeholder | string | null    | Placeholder attribute of input. Shown when input is empty. |
+| attributes  | object |  {}     | A map of HTML5 input attributes to apply on the input.     |
+### Example
+ 
+ ```js
+ const popover = new DarkEditable(el, {
+     type: 'number',
+     attributes: {
+         placeholder: 'Enter age',
+         min: 0,
+         max: 120,
+         step: 1,
+         required: true
+     }
+ });
+ ```

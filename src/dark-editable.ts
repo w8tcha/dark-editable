@@ -99,6 +99,7 @@ export default class DarkEditable{
         if(this.options?.error && typeof this.options?.error === "function"){
             this.error = this.options.error;
         }
+        this.get_opt("attributes", {});
     }
 
     init_text(){

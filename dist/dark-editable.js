@@ -42,13 +42,17 @@ class f extends h {
     r(this, "popover", null);
   }
   init() {
-    this.popover = new x(this.context.element, {
+    const e = {
       container: "body",
       content: this.context.typeElement.create(),
       html: !0,
       customClass: "dark-editable",
       title: this.context.options.title
-    }), this.context.element.addEventListener("show.bs.popover", () => {
+    };
+    this.popover = new x(this.context.element, Object.assign(
+      e,
+      this.context.options.popoverOptions
+    )), this.context.element.addEventListener("show.bs.popover", () => {
       this.event_show();
     }), this.context.element.addEventListener("shown.bs.popover", () => {
       this.event_shown();
@@ -56,10 +60,10 @@ class f extends h {
       this.event_hide();
     }), this.context.element.addEventListener("hidden.bs.popover", () => {
       this.event_hidden();
-    }), document.addEventListener("click", (e) => {
-      const s = e.target;
-      if (this.popover && s === this.popover.tip || s === this.context.element) return;
-      let n = s.parentNode;
+    }), document.addEventListener("click", (s) => {
+      const i = s.target;
+      if (this.popover && i === this.popover.tip || i === this.context.element) return;
+      let n = i.parentNode;
       for (; n; ) {
         if (n === this.popover.tip) return;
         n = n.parentNode;
@@ -127,14 +131,14 @@ class a {
       const s = this.getValue();
       if (this.context.options.send && this.context.options.id && this.context.options.url && this.context.getValue() !== s) {
         this.showLoad();
-        let n;
+        let i;
         try {
-          const i = await this.ajax(s);
-          i.ok ? n = await this.context.success(i, s) : n = await this.context.error(i, s) || `${i.status} ${i.statusText}`;
-        } catch (i) {
-          console.error(i), n = i;
+          const n = await this.ajax(s);
+          n.ok ? i = await this.context.success(n, s) : i = await this.context.error(n, s) || `${n.status} ${n.statusText}`;
+        } catch (n) {
+          console.error(n), i = n;
         }
-        n ? (this.setError(n), this.showError()) : (this.setError(""), this.hideError(), this.context.setValue(this.getValue()), this.context.modeElement.hide(), this.initText()), this.hideLoad();
+        i ? (this.setError(i), this.showError()) : (this.setError(""), this.hideError(), this.context.setValue(this.getValue()), this.context.modeElement.hide(), this.initText()), this.hideLoad();
       } else
         this.context.setValue(this.getValue()), this.context.modeElement.hide(), this.initText();
       this.context.element.dispatchEvent(new CustomEvent("save"));
@@ -167,7 +171,7 @@ class a {
     this.load && (this.load.style.display = "block");
   }
   ajax(t) {
-    var i;
+    var n;
     let e = this.context.options.url;
     if (!e)
       throw new Error("URL is required!");
@@ -176,14 +180,14 @@ class a {
     if (!this.context.options.name)
       throw new Error("Name is required!");
     const s = new FormData();
-    if (s.append("id", this.context.options.id), s.append("name", this.context.options.name), s.append("value", t), ((i = this.context.options.ajaxOptions) == null ? void 0 : i.method) === "GET") {
+    if (s.append("id", this.context.options.id), s.append("name", this.context.options.name), s.append("value", t), ((n = this.context.options.ajaxOptions) == null ? void 0 : n.method) === "GET") {
       const c = [];
       s.forEach((p, d) => {
         c.push(`${d}=${p}`);
       }), e += "?" + c.join("&");
     }
-    const n = { ...this.context.options.ajaxOptions };
-    return n.body = s, fetch(e, n);
+    const i = { ...this.context.options.ajaxOptions };
+    return i.body = s, fetch(e, i);
   }
   async successResponse(t, e) {
   }
@@ -224,7 +228,7 @@ class y extends a {
     t.type = typeof this.context.options.type == "string" ? this.context.options.type : "text";
     const { options: e = {} } = this.context;
     t.type = typeof e.type == "string" ? e.type : "text";
-    const s = e.attributes || {}, n = [
+    const s = e.attributes || {}, i = [
       "step",
       "min",
       "max",
@@ -240,8 +244,8 @@ class y extends a {
       "name",
       "value"
     ];
-    for (const [i, c] of Object.entries(s))
-      n.includes(i) && c !== void 0 && t.setAttribute(i, String(c));
+    for (const [n, c] of Object.entries(s))
+      i.includes(n) && c !== void 0 && t.setAttribute(n, String(c));
     return this.createContainer(t);
   }
 }
@@ -308,8 +312,8 @@ class L {
   }
   /* INIT METHODS */
   get_opt(t, e) {
-    var s, n;
-    return this.options[t] = ((s = this.element.dataset) == null ? void 0 : s[t]) ?? ((n = this.options) == null ? void 0 : n[t]) ?? e;
+    var s, i;
+    return this.options[t] = ((s = this.element.dataset) == null ? void 0 : s[t]) ?? ((i = this.options) == null ? void 0 : i[t]) ?? e;
   }
   get_opt_bool(t, e) {
     if (this.get_opt(t, e), typeof this.options[t] != "boolean") {
@@ -325,14 +329,14 @@ class L {
     }
   }
   init_options() {
-    var t, e, s, n, i;
+    var t, e, s, i, n;
     this.get_opt("value", this.element.innerHTML), this.get_opt("name", this.element.id), this.get_opt("id", null), this.get_opt("title", ""), this.get_opt("type", "text"), this.get_opt("emptytext", "Empty"), this.get_opt("placeholder", this.element.getAttribute("placeholder")), this.get_opt("mode", "popup"), this.get_opt("url", null), this.get_opt("ajaxOptions", {}), this.options.ajaxOptions = Object.assign({
       method: "POST",
       dataType: "text",
       headers: {
         RequestVerificationToken: (t = document.querySelector('input[name="__RequestVerificationToken"]')) == null ? void 0 : t.value
       }
-    }, this.options.ajaxOptions), this.get_opt_bool("send", !0), this.get_opt_bool("disabled", !1), this.get_opt_bool("required", !1), this.get_opt_bool("showbuttons", !0), (e = this.options) != null && e.success && typeof ((s = this.options) == null ? void 0 : s.success) == "function" && (this.success = this.options.success), (n = this.options) != null && n.error && typeof ((i = this.options) == null ? void 0 : i.error) == "function" && (this.error = this.options.error), this.get_opt("attributes", {});
+    }, this.options.ajaxOptions), this.get_opt_bool("send", !0), this.get_opt_bool("disabled", !1), this.get_opt_bool("required", !1), this.get_opt_bool("showbuttons", !0), (e = this.options) != null && e.success && typeof ((s = this.options) == null ? void 0 : s.success) == "function" && (this.success = this.options.success), (i = this.options) != null && i.error && typeof ((n = this.options) == null ? void 0 : n.error) == "function" && (this.error = this.options.error), this.get_opt("attributes", {}), this.get_opt("popoverOptions", {});
   }
   init_text() {
     const t = "dark-editable-element-empty";

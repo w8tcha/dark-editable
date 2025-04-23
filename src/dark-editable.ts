@@ -1,14 +1,14 @@
-import "./dark-editable.css";
-import PopupMode from "./Modes/PopupMode.ts";
-import InlineMode from "./Modes/InlineMode.ts";
-import BaseType from "./Types/BaseType.ts";
-import InputType from "./Types/InputType.ts";
-import TextAreaType from "./Types/TextAreaType.ts";
-import SelectType from "./Types/SelectType.ts";
-import DateType from "./Types/DateType.ts";
-import DateTimeType from "./Types/DateTimeType.ts";
-import Options from "./Interfaces/Options.ts";
-import BaseMode from "./Modes/BaseMode.ts";
+import './dark-editable.css';
+import PopupMode from './Modes/PopupMode.ts';
+import InlineMode from './Modes/InlineMode.ts';
+import BaseType from './Types/BaseType.ts';
+import InputType from './Types/InputType.ts';
+import TextAreaType from './Types/TextAreaType.ts';
+import SelectType from './Types/SelectType.ts';
+import DateType from './Types/DateType.ts';
+import DateTimeType from './Types/DateTimeType.ts';
+import Options from './Interfaces/Options.ts';
+import BaseMode from './Modes/BaseMode.ts';
 
 /*!
  * DarkEditable.js
@@ -35,7 +35,7 @@ export default class DarkEditable{
         if(this.options.disabled){
             this.disable();
         }
-        this.element.dispatchEvent(new CustomEvent("init"));
+        this.element.dispatchEvent(new CustomEvent('init'));
     }
 
     /* INIT METHODS */
@@ -50,15 +50,15 @@ export default class DarkEditable{
     {
         this.get_opt(name, default_value);
         // @ts-ignore
-        if(typeof this.options[ name ] !== "boolean"){
+        if(typeof this.options[ name ] !== 'boolean'){
             // @ts-ignore
-            if(this.options[ name ] === "true") {
+            if(this.options[ name ] === 'true') {
                 // @ts-ignore
                 this.options[ name ] = true;
                 return;
             }
             // @ts-ignore
-            if(this.options[ name ] === "false") {
+            if(this.options[ name ] === 'false') {
                 // @ts-ignore
                 this.options[ name ] = false;
                 return;
@@ -72,38 +72,39 @@ export default class DarkEditable{
     {
 		
 		//priority date elements
-        this.get_opt("value", this.element.innerHTML);
-        this.get_opt("name", this.element.id);
-        this.get_opt("id", null);
-        this.get_opt("title", "");
-        this.get_opt("type", "text");
-        this.get_opt("emptytext", "Empty");
-        this.get_opt("placeholder", this.element.getAttribute("placeholder"));
-        this.get_opt("mode", "popup");
-        this.get_opt("url", null);
-        this.get_opt("ajaxOptions", {});
+        this.get_opt('value', this.element.innerHTML);
+        this.get_opt('name', this.element.id);
+        this.get_opt('id', null);
+        this.get_opt('title', '');
+        this.get_opt('type', 'text');
+        this.get_opt('emptytext', 'Empty');
+        this.get_opt('placeholder', this.element.getAttribute('placeholder'));
+        this.get_opt('mode', 'popup');
+        this.get_opt('url', null);
+        this.get_opt('ajaxOptions', {});
         this.options.ajaxOptions = Object.assign({
-            method: "POST",
-            dataType: "text",
+            method: 'POST',
+            dataType: 'text',
 			headers: {
 				RequestVerificationToken: (document.querySelector('input[name="__RequestVerificationToken"]') as HTMLInputElement)?.value
 			}
         }, this.options.ajaxOptions);
-        this.get_opt_bool("send", true);
-        this.get_opt_bool("disabled", false);
-        this.get_opt_bool("required", false);
-        this.get_opt_bool("showbuttons", true);
-        if(this.options?.success && typeof this.options?.success === "function"){
+        this.get_opt_bool('send', true);
+        this.get_opt_bool('disabled', false);
+        this.get_opt_bool('required', false);
+        this.get_opt_bool('showbuttons', true);
+        if(this.options?.success && typeof this.options?.success === 'function'){
             this.success = this.options.success;
         }
-        if(this.options?.error && typeof this.options?.error === "function"){
+        if(this.options?.error && typeof this.options?.error === 'function'){
             this.error = this.options.error;
         }
-        this.get_opt("attributes", {});
+        this.get_opt('attributes', {});
+        this.get_opt('popoverOptions', {});
     }
 
     init_text(){
-        const empty_class = "dark-editable-element-empty";
+        const empty_class = 'dark-editable-element-empty';
         this.element.classList.remove(empty_class);
         if(this.typeElement.initText()){
             this.element.classList.add(empty_class);
@@ -111,7 +112,7 @@ export default class DarkEditable{
     }
 
     init_style(){
-        this.element.classList.add("dark-editable-element");
+        this.element.classList.add('dark-editable-element');
     }
 
     /* INIT METHODS END */
@@ -133,22 +134,22 @@ export default class DarkEditable{
             return new this.options.type(this);
         }
         switch (this.options.type) {
-            case "text":
-            case "password":
-            case "email":
-            case "url":
-            case "tel":
-            case "number":
-            case "range":
-            case "time":
+            case 'text':
+            case 'password':
+            case 'email':
+            case 'url':
+            case 'tel':
+            case 'number':
+            case 'range':
+            case 'time':
                 return new InputType(this);
-            case "textarea":
+            case 'textarea':
                 return new TextAreaType(this);
-            case "select":
+            case 'select':
                 return new SelectType(this);
-            case "date":
+            case 'date':
                 return new DateType(this);
-            case "datetime":
+            case 'datetime':
                 return new DateTimeType(this);
         }
         throw new Error(`Undefined type`);
@@ -173,14 +174,14 @@ export default class DarkEditable{
     enable(): void
     {
         this.options.disabled = false;
-        this.element.classList.remove("dark-editable-element-disabled");
+        this.element.classList.remove('dark-editable-element-disabled');
         this.modeElement.enable();
     }
 
     disable(): void
     {
         this.options.disabled = true;
-        this.element.classList.add("dark-editable-element-disabled");
+        this.element.classList.add('dark-editable-element-disabled');
         this.modeElement.enable();
     }
 

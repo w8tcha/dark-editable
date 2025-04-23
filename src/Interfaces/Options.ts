@@ -1,4 +1,5 @@
-import BaseType from "../Types/BaseType.ts";
+import { Popover } from 'bootstrap';
+import BaseType from '../Types/BaseType.ts';
 
 export default interface Options {
     value?: string;
@@ -17,6 +18,7 @@ export default interface Options {
     showbuttons?: boolean;
     success?: (response: Response, newValue: string|number) => Promise<any>;
     error?: (response: Response, newValue: string|number) => Promise<any>;
+    popoverOptions?: Popover.Options;
     //other
     format?: string;
     viewformat?: string;

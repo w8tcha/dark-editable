@@ -1,4 +1,4 @@
-import BaseType from "./BaseType.js";
+import BaseType from './BaseType.js';
 
 export default class TextAreaType extends BaseType{
     create(){

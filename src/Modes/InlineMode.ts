@@ -1,4 +1,4 @@
-import BaseMode from "./BaseMode.js";
+import BaseMode from './BaseMode.js';
 
 export default class InlineMode extends BaseMode{
     init(){

@@ -1,9 +1,9 @@
-import BaseType from "./BaseType.js";
+import BaseType from './BaseType.js';
 
 export default class DateType extends BaseType{
     create(){
         const input = this.createElement(`input`);
-        input.type = "date";
+        input.type = 'date';
 
         return this.createContainer(input);
     }
@@ -11,8 +11,8 @@ export default class DateType extends BaseType{
     initText(): boolean
     {
 	    const value = this.context.getValue();
-	    if (value === "") {
-            this.context.element.innerHTML = this.context.options.emptytext || "";
+	    if (value === '') {
+            this.context.element.innerHTML = this.context.options.emptytext || '';
             return true;
         } else {
             this.context.element.innerHTML = value;

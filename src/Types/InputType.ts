@@ -1,13 +1,13 @@
-import BaseType from "./BaseType.js";
+import BaseType from './BaseType.js';
 
 export default class InputType extends BaseType{
     create(){
         const input = this.createElement(`input`);
-        input.type = typeof this.context.options.type === "string" ? this.context.options.type : 'text';
+        input.type = typeof this.context.options.type === 'string' ? this.context.options.type : 'text';
 
         const { options = {} } = this.context;
 
-        input.type = typeof options.type === "string" ? options.type : 'text';
+        input.type = typeof options.type === 'string' ? options.type : 'text';
 
         const inputAttrs = options.attributes || {};
         const allowedAttributes = [

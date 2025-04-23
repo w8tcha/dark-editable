@@ -1,9 +1,9 @@
-import DateType from "./DateType.js";
+import DateType from './DateType.js';
 
 export default class DateTimeType extends DateType{
     create(){
         const input = this.createElement(`input`);
-        input.type = "datetime-local";
+        input.type = 'datetime-local';
 
         return this.createContainer(input);
     }

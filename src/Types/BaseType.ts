@@ -1,5 +1,5 @@
-import DarkEditable from "../dark-editable.ts";
-import BaseTypeButtons from "../Interfaces/BaseTypeButtons.ts";
+import DarkEditable from '../dark-editable.ts';
+import BaseTypeButtons from '../Interfaces/BaseTypeButtons.ts';
 
 export default class BaseType{
     context: DarkEditable;
@@ -44,16 +44,16 @@ export default class BaseType{
     createContainerError(): HTMLDivElement
     {
         const div = document.createElement(`div`);
-        div.classList.add("text-danger", "fst-italic", "mb-2", "fw-bold");
-        div.style.display = "none";
+        div.classList.add('text-danger', 'fst-italic', 'mb-2', 'fw-bold');
+        div.style.display = 'none';
         return div;
     }
 
     createContainerForm(): HTMLFormElement
     {
         const form = document.createElement(`form`);
-        form.classList.add("d-flex", "align-items-start");
-        form.style.gap = "10px";
+        form.classList.add('d-flex', 'align-items-start');
+        form.style.gap = '10px';
         form.addEventListener('submit', async e => {
             e.preventDefault();
             const newValue = this.getValue();
@@ -88,7 +88,7 @@ export default class BaseType{
                 this.context.modeElement.hide();
                 this.initText();
             }
-            this.context.element.dispatchEvent(new CustomEvent("save"));
+            this.context.element.dispatchEvent(new CustomEvent('save'));
         })
         return form;
     }
@@ -96,32 +96,32 @@ export default class BaseType{
     createContainerLoad(): HTMLDivElement
     {
         const div = document.createElement(`div`);
-        div.style.display = "none";
-        div.style.position = "absolute";
-        div.style.background = "white";
-        div.style.width = "100%";
-        div.style.height = "100%";
+        div.style.display = 'none';
+        div.style.position = 'absolute';
+        div.style.background = 'white';
+        div.style.width = '100%';
+        div.style.height = '100%';
         div.style.top = '0';
         div.style.left = '0';
         const loader = document.createElement(`div`);
-        loader.classList.add("dark-editable-loader");
+        loader.classList.add('dark-editable-loader');
         div.append(loader);
         return div;
     }
 
     createButton(): HTMLButtonElement
     {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.classList.add("btn", "btn-sm");
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.classList.add('btn', 'btn-sm');
         return button;
     }
 
     createButtonSuccess(): HTMLButtonElement
     {
         const btn_success = this.createButton();
-        btn_success.type = "submit";
-        btn_success.classList.add("btn-success");
+        btn_success.type = 'submit';
+        btn_success.classList.add('btn-success');
         btn_success.innerHTML = '<i class="fa-solid fa-check"></i>';
         return btn_success;
     }
@@ -129,9 +129,9 @@ export default class BaseType{
     createButtonCancel(): HTMLButtonElement
     {
         const btn_cancel = this.createButton();
-        btn_cancel.classList.add("btn-danger");
+        btn_cancel.classList.add('btn-danger');
         btn_cancel.innerHTML = '<i class="fa-solid fa-times"></i>';
-        btn_cancel.addEventListener("click", () => {
+        btn_cancel.addEventListener('click', () => {
             this.context.modeElement.hide();
         });
         return btn_cancel;
@@ -140,14 +140,14 @@ export default class BaseType{
     hideLoad(): void
     {
         if(this.load){
-            this.load.style.display = "none";
+            this.load.style.display = 'none';
         }
     }
 
     showLoad(): void
     {
         if(this.load){
-            this.load.style.display = "block";
+            this.load.style.display = 'block';
         }
     }
 
@@ -155,25 +155,25 @@ export default class BaseType{
     {
         let url = this.context.options.url;
         if(!url){
-            throw new Error("URL is required!");
+            throw new Error('URL is required!');
         }
         if(!this.context.options.id){
-            throw new Error("pk is required!");
+            throw new Error('pk is required!');
         }
         if(!this.context.options.name){
-            throw new Error("Name is required!");
+            throw new Error('Name is required!');
         }
         const form = new FormData;
-        form.append("id", this.context.options.id);
-        form.append("name", this.context.options.name);
-        form.append("value", new_value);
+        form.append('id', this.context.options.id);
+        form.append('name', this.context.options.name);
+        form.append('value', new_value);
 
-        if(this.context.options.ajaxOptions?.method === "GET"){
+        if(this.context.options.ajaxOptions?.method === 'GET'){
             const params: [string?] = [];
             form.forEach((value, key) => {
                 params.push(`${key}=${value}`);
             });
-            url += "?" + params.join("&");
+            url += '?' + params.join('&');
         }
         
 		const ajaxOptions = {...this.context.options.ajaxOptions};
@@ -201,21 +201,21 @@ export default class BaseType{
     showError(): void
     {
         if(this.error){
-            this.error.style.display = "block";
+            this.error.style.display = 'block';
         }
     }
 
     hideError(): void
     {
         if(this.error){
-            this.error.style.display = "none";
+            this.error.style.display = 'none';
         }
     }
 
     createElement(name: string): HTMLInputElement
     {
         const element = <HTMLInputElement>document.createElement(name);
-        element.classList.add("form-control");
+        element.classList.add('form-control');
         if(this.context.options.required){
             element.required = this.context.options.required;
         }
@@ -242,8 +242,8 @@ export default class BaseType{
 
     initText(): boolean
     {
-        if(this.context.getValue() === ""){
-            this.context.element.innerHTML = this.context.options.emptytext || "";
+        if(this.context.getValue() === ''){
+            this.context.element.innerHTML = this.context.options.emptytext || '';
             return true;
         } else {
             this.context.element.innerHTML = this.context.getValue();

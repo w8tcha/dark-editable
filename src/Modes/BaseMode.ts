@@ -1,4 +1,4 @@
-import DarkEditable from "../dark-editable.ts";
+import DarkEditable from '../dark-editable.ts';
 
 export default class BaseMode{
     context: DarkEditable;
@@ -12,19 +12,19 @@ export default class BaseMode{
     event_show(){
         this.context.typeElement.hideError();
         if(!this.context.typeElement.element){
-            throw new Error("Element is missing!");
+            throw new Error('Element is missing!');
         }
         this.context.typeElement.element.value = this.context.getValue();
-        this.context.element.dispatchEvent(new CustomEvent("show"));
+        this.context.element.dispatchEvent(new CustomEvent('show'));
     }
     event_shown(){
-        this.context.element.dispatchEvent(new CustomEvent("shown"));
+        this.context.element.dispatchEvent(new CustomEvent('shown'));
     }
     event_hide(){
-        this.context.element.dispatchEvent(new CustomEvent("hide"));
+        this.context.element.dispatchEvent(new CustomEvent('hide'));
     }
     event_hidden(){
-        this.context.element.dispatchEvent(new CustomEvent("hidden"));
+        this.context.element.dispatchEvent(new CustomEvent('hidden'));
     }
     init(){
         throw new Error('Method `init` not define!');

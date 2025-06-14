@@ -3,11 +3,12 @@ It is an alternative to [x-editable](https://github.com/vitalets/x-editable). Wr
 
 Here's a quick demo on [jfiddle](https://jsfiddle.net/DarKsandr/8zfd32jp/) to give you some example of how it works.
 
+*FORK* for use in [YAF.NET](https://github.com/YAFNET/YAFNET)
 
 ## Quick start
 You can install via npm 
 ```
-npm i dark-editable
+npm i w8tcha/dark-editable
 ```
 or manually:
 
@@ -19,7 +20,6 @@ Required
     ```
     <link rel="stylesheet" href="bootstrap.min.css">
     <script src="bootstrap.bundle.min.js"></script>
-    <script src="moment.js"></script>
     ```
 
 2. Download corresponding dark-editable build and include it on your page:

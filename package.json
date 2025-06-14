@@ -1,7 +1,7 @@
 {
-  "name": "dark-editable",
-  "description": "In-place editing with Bootstrap 5, Popper, Moment.js",
-  "author": "DarKsandr",
+  "name": "@w8tcha/dark-editable",
+  "description": "In-place editing with Bootstrap 5 and Popper",
+  "author": "w8tcha",
   "license": "MIT",
   "type": "module",
   "files": [
@@ -19,11 +19,14 @@
   },
   "devDependencies": {
     "@types/bootstrap": "^5.2.10",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.5",
     "typescript": "^5.8.3",
     "vite": "^6.3.2",
     "vite-plugin-dts": "^4.5.3",
     "vite-plugin-lib-inject-css": "^2.2.2"
   },
+  "browserslist": [ "last 2 versions" ],
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -32,10 +35,10 @@
   "version": "2.1.5",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DarKsandr/dark-editable.git"
+    "url": "git+https://github.com/w8tcha/dark-editable.git"
   },
   "bugs": {
-    "url": "https://github.com/DarKsandr/dark-editable/issues"
+    "url": "https://github.com/w8tcha/dark-editable/issues"
   },
-  "homepage": "https://github.com/DarKsandr/dark-editable#readme"
+  "homepage": "https://github.com/w8tcha/dark-editable#readme"
 }

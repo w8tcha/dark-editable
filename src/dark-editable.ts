@@ -1,4 +1,3 @@
-import './dark-editable.css';
 import PopupMode from './Modes/PopupMode.ts';
 import InlineMode from './Modes/InlineMode.ts';
 import BaseType from './Types/BaseType.ts';
@@ -9,6 +8,8 @@ import DateType from './Types/DateType.ts';
 import DateTimeType from './Types/DateTimeType.ts';
 import Options from './Interfaces/Options.ts';
 import BaseMode from './Modes/BaseMode.ts';
+
+import './dark-editable.css';
 
 /*!
  * DarkEditable.js

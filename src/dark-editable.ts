@@ -11,10 +11,6 @@ import BaseMode from './Modes/BaseMode.ts';
 
 import './dark-editable.css';
 
-/*!
- * DarkEditable.js
- * License: MIT
- */
 export default class DarkEditable{
     element: HTMLElement;
     options: Options;

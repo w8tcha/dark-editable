@@ -3,10 +3,6 @@ import { default as InlineMode } from './Modes/InlineMode.ts';
 import { default as BaseType } from './Types/BaseType.ts';
 import { default as Options } from './Interfaces/Options.ts';
 import { default as BaseMode } from './Modes/BaseMode.ts';
-/*!
- * DarkEditable.js
- * License: MIT
- */
 export default class DarkEditable {
     element: HTMLElement;
     options: Options;

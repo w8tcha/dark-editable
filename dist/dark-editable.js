@@ -1,3 +1,7 @@
+/*!
+ * DarkEditable.js v2.1.5
+ * License: MIT
+ */
 import './dark-editable.css';var u = Object.defineProperty;
 var m = (o, t, e) => t in o ? u(o, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : o[t] = e;
 var r = (o, t, e) => m(o, typeof t != "symbol" ? t + "" : t, e);
@@ -298,10 +302,6 @@ class w extends l {
     this.context.setValue(this.context.getValue());
   }
 }
-/*!
- * DarkEditable.js
- * License: MIT
- */
 class L {
   constructor(t, e = {}) {
     r(this, "element");

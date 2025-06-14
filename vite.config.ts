@@ -1,12 +1,17 @@
 import { defineConfig } from 'vite';
 import { libInjectCss } from 'vite-plugin-lib-inject-css';
 import dts from 'vite-plugin-dts';
+import banner from 'vite-plugin-banner';
 import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
   plugins: [
       libInjectCss(),
-      dts()
+      dts(),
+      banner(`/*!
+ * DarkEditable.js v${process.env.npm_package_version}
+ * License: MIT
+ */`)
   ],
   css: {
 	  postcss: {

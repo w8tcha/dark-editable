@@ -15,7 +15,6 @@ or manually:
 Required
 - Bootstrap 5
 - Popper
-- Moment.js
 1. Include it on your page. 
     ```
     <link rel="stylesheet" href="bootstrap.min.css">

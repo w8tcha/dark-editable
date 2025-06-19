@@ -22,4 +22,5 @@ export default class DarkEditable {
     disable(): void;
     setValue(value: string): void;
     getValue(): string;
+    getOption(name: string): any;
 }

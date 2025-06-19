@@ -1,5 +1,5 @@
 /*!
- * DarkEditable.js v2.1.5
+ * DarkEditable.js v2.1.6
  * License: MIT
  */
 import './dark-editable.css';var u = Object.defineProperty;
@@ -16,16 +16,16 @@ class h {
   event_show() {
     if (this.context.typeElement.hideError(), !this.context.typeElement.element)
       throw new Error("Element is missing!");
-    this.context.typeElement.element.value = this.context.getValue(), this.context.element.dispatchEvent(new CustomEvent("show"));
+    this.context.typeElement.element.value = this.context.getValue(), this.context.element.dispatchEvent(new CustomEvent("show", { detail: { DarkEditable: this.context } }));
   }
   event_shown() {
-    this.context.element.dispatchEvent(new CustomEvent("shown"));
+    this.context.element.dispatchEvent(new CustomEvent("shown", { detail: { DarkEditable: this.context } }));
   }
   event_hide() {
-    this.context.element.dispatchEvent(new CustomEvent("hide"));
+    this.context.element.dispatchEvent(new CustomEvent("hide", { detail: { DarkEditable: this.context } }));
   }
   event_hidden() {
-    this.context.element.dispatchEvent(new CustomEvent("hidden"));
+    this.context.element.dispatchEvent(new CustomEvent("hidden", { detail: { DarkEditable: this.context } }));
   }
   init() {
     throw new Error("Method `init` not define!");
@@ -145,7 +145,7 @@ class a {
         i ? (this.setError(i), this.showError()) : (this.setError(""), this.hideError(), this.context.setValue(this.getValue()), this.context.modeElement.hide(), this.initText()), this.hideLoad();
       } else
         this.context.setValue(this.getValue()), this.context.modeElement.hide(), this.initText();
-      this.context.element.dispatchEvent(new CustomEvent("save"));
+      this.context.element.dispatchEvent(new CustomEvent("save", { detail: { DarkEditable: this.context } }));
     }), t;
   }
   createContainerLoad() {
@@ -226,7 +226,7 @@ class a {
     return this.element ? this.element.value : "";
   }
 }
-class y extends a {
+class b extends a {
   create() {
     const t = this.createElement("input");
     t.type = typeof this.context.options.type == "string" ? this.context.options.type : "text";
@@ -253,7 +253,7 @@ class y extends a {
     return this.createContainer(t);
   }
 }
-class b extends a {
+class y extends a {
   create() {
     const t = this.createElement("textarea");
     return this.createContainer(t);
@@ -308,7 +308,7 @@ class L {
     r(this, "options");
     r(this, "typeElement");
     r(this, "modeElement");
-    this.element = t, this.options = { ...e }, this.init_options(), this.typeElement = this.route_type(), this.typeElement.initOptions(), this.modeElement = this.route_mode(), this.modeElement.init(), this.setValue(this.element.innerHTML), this.init_style(), this.options.disabled && this.disable(), this.element.dispatchEvent(new CustomEvent("init"));
+    this.element = t, this.options = { ...e }, this.init_options(), this.typeElement = this.route_type(), this.typeElement.initOptions(), this.modeElement = this.route_mode(), this.modeElement.init(), this.setValue(this.element.innerHTML), this.init_style(), this.options.disabled && this.disable(), this.element.dispatchEvent(new CustomEvent("init", { detail: { DarkEditable: this } }));
   }
   /* INIT METHODS */
   get_opt(t, e) {
@@ -368,9 +368,9 @@ class L {
       case "number":
       case "range":
       case "time":
-        return new y(this);
-      case "textarea":
         return new b(this);
+      case "textarea":
+        return new y(this);
       case "select":
         return new v(this);
       case "date":
@@ -400,6 +400,9 @@ class L {
   }
   getValue() {
     return this.options.value ?? "";
+  }
+  getOption(t) {
+    return this.options[t] ?? null;
   }
   /* METHODS END */
 }

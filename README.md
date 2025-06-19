@@ -130,6 +130,7 @@ Options can be defined via javascript or via data-* html attributes.
 | enable()          | none                              | Enables editable                                              |
 | getValue()        | none                              | Returns current values of editable elements                   |
 | setValue(value)   | - **value** *Mixed* new value     | Sets new value of editable                                    |
+| getOption(value)  | - **value** *Mixed* name option   | Returns option value of editable elements                     |
 # Events
 ```
 document.getElementById("username").addEventListener("save", function(e){

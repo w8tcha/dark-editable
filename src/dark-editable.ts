@@ -32,7 +32,7 @@ export default class DarkEditable{
         if(this.options.disabled){
             this.disable();
         }
-        this.element.dispatchEvent(new CustomEvent('init'));
+        this.element.dispatchEvent(new CustomEvent('init', { detail: { DarkEditable: this } }));
     }
 
     /* INIT METHODS */
@@ -191,6 +191,11 @@ export default class DarkEditable{
     getValue(): string
     {
         return this.options.value ?? '';
+    }
+
+    getOption(name: string): any {
+	    // @ts-ignore
+	    return this.options[name] ?? null;
     }
 
     /* METHODS END */

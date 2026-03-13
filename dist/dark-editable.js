@@ -2,402 +2,362 @@
  * DarkEditable.js v2.1.7
  * License: MIT
  */
-import { Popover as p } from "bootstrap";
-import './dark-editable.css';class c {
-  context;
-  constructor(t) {
-    if (this.constructor === c)
-      throw new Error("It's abstract class");
-    this.context = t;
-  }
-  event_show() {
-    if (this.context.typeElement.hideError(), !this.context.typeElement.element)
-      throw new Error("Element is missing!");
-    this.context.typeElement.element.value = this.context.getValue(), this.context.element.dispatchEvent(new CustomEvent("show", { detail: { DarkEditable: this.context } }));
-  }
-  event_shown() {
-    this.context.element.dispatchEvent(new CustomEvent("shown", { detail: { DarkEditable: this.context } }));
-  }
-  event_hide() {
-    this.context.element.dispatchEvent(new CustomEvent("hide", { detail: { DarkEditable: this.context } }));
-  }
-  event_hidden() {
-    this.context.element.dispatchEvent(new CustomEvent("hidden", { detail: { DarkEditable: this.context } }));
-  }
-  init() {
-    throw new Error("Method `init` not define!");
-  }
-  enable() {
-    throw new Error("Method `enable` not define!");
-  }
-  disable() {
-    throw new Error("Method `disable` not define!");
-  }
-  hide() {
-    throw new Error("Method `hide` not define!");
-  }
-}
-class d extends c {
-  popover = null;
-  init() {
-    const t = {
-      container: "body",
-      content: this.context.typeElement.create(),
-      html: !0,
-      customClass: "dark-editable",
-      title: this.context.options.title
-    };
-    this.popover = new p(this.context.element, Object.assign(
-      t,
-      this.context.options.popoverOptions
-    )), this.context.element.addEventListener("show.bs.popover", () => {
-      this.event_show();
-    }), this.context.element.addEventListener("shown.bs.popover", () => {
-      this.event_shown();
-    }), this.context.element.addEventListener("hide.bs.popover", () => {
-      this.event_hide();
-    }), this.context.element.addEventListener("hidden.bs.popover", () => {
-      this.event_hidden();
-    }), document.addEventListener("click", (e) => {
-      const s = e.target;
-      if (this.popover && s === this.popover.tip || s === this.context.element) return;
-      let n = s.parentNode;
-      for (; n; ) {
-        if (n === this.popover.tip) return;
-        n = n.parentNode;
-      }
-      this.hide();
-    });
-  }
-  enable() {
-    this.popover && this.popover.enable();
-  }
-  disable() {
-    this.popover && this.popover.disable();
-  }
-  hide() {
-    this.popover && this.popover.hide();
-  }
-}
-class u extends c {
-  init() {
-    const t = () => {
-      if (!this.context.options.disabled) {
-        const e = this.context.typeElement.create();
-        this.event_show(), this.context.element.removeEventListener("click", t), this.context.element.innerHTML = "", this.context.element.append(e), this.event_shown();
-      }
-    };
-    this.context.element.addEventListener("click", t);
-  }
-  enable() {
-  }
-  disable() {
-  }
-  hide() {
-    this.event_hide(), this.context.element.innerHTML = this.context.getValue(), setTimeout(() => {
-      this.init(), this.event_hidden();
-    }, 100);
-  }
-}
-class r {
-  context;
-  element = null;
-  error = null;
-  form = null;
-  load = null;
-  buttons = { success: null, cancel: null };
-  constructor(t) {
-    if (this.constructor === r)
-      throw new Error("It's abstract class");
-    this.context = t;
-  }
-  create() {
-    throw new Error("Method `create` not define!");
-  }
-  createContainer(t) {
-    const e = document.createElement("div");
-    return this.element = t, this.error = this.createContainerError(), this.form = this.createContainerForm(), this.load = this.createContainerLoad(), this.form.append(t, this.load), this.buttons.success = null, this.buttons.cancel = null, this.context.options.showbuttons && (this.buttons.success = this.createButtonSuccess(), this.buttons.cancel = this.createButtonCancel(), this.form.append(this.buttons.success, this.buttons.cancel)), e.append(this.error, this.form), e;
-  }
-  createContainerError() {
-    const t = document.createElement("div");
-    return t.classList.add("text-danger", "fst-italic", "mb-2", "fw-bold"), t.style.display = "none", t;
-  }
-  createContainerForm() {
-    const t = document.createElement("form");
-    return t.classList.add("d-flex", "align-items-start"), t.style.gap = "10px", t.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const s = this.getValue();
-      if (this.context.options.send && this.context.options.id && this.context.options.url && this.context.getValue() !== s) {
-        this.showLoad();
-        let n;
-        try {
-          const i = await this.ajax(s);
-          i.ok ? n = await this.context.success(i, s) : n = await this.context.error(i, s) || `${i.status} ${i.statusText}`;
-        } catch (i) {
-          console.error(i), n = i;
-        }
-        n ? (this.setError(n), this.showError()) : (this.setError(""), this.hideError(), this.context.setValue(this.getValue()), this.context.modeElement.hide(), this.initText()), this.hideLoad();
-      } else
-        this.context.setValue(this.getValue()), this.context.modeElement.hide(), this.initText();
-      this.context.element.dispatchEvent(new CustomEvent("save", { detail: { DarkEditable: this.context } }));
-    }), t;
-  }
-  createContainerLoad() {
-    const t = document.createElement("div");
-    t.style.display = "none", t.style.position = "absolute", t.style.background = "white", t.style.width = "100%", t.style.height = "100%", t.style.top = "0", t.style.left = "0";
-    const e = document.createElement("div");
-    return e.classList.add("dark-editable-loader"), t.append(e), t;
-  }
-  createButton() {
-    const t = document.createElement("button");
-    return t.type = "button", t.classList.add("btn", "btn-sm"), t;
-  }
-  createButtonSuccess() {
-    const t = this.createButton();
-    return t.type = "submit", t.classList.add("btn-success"), t.innerHTML = '<i class="fa-solid fa-check"></i>', t;
-  }
-  createButtonCancel() {
-    const t = this.createButton();
-    return t.classList.add("btn-danger"), t.innerHTML = '<i class="fa-solid fa-times"></i>', t.addEventListener("click", () => {
-      this.context.modeElement.hide();
-    }), t;
-  }
-  hideLoad() {
-    this.load && (this.load.style.display = "none");
-  }
-  showLoad() {
-    this.load && (this.load.style.display = "block");
-  }
-  ajax(t) {
-    let e = this.context.options.url;
-    if (!e)
-      throw new Error("URL is required!");
-    if (!this.context.options.id)
-      throw new Error("pk is required!");
-    if (!this.context.options.name)
-      throw new Error("Name is required!");
-    const s = new FormData();
-    if (s.append("id", this.context.options.id), s.append("name", this.context.options.name), s.append("value", t), this.context.options.ajaxOptions?.method === "GET") {
-      const i = [];
-      s.forEach((a, l) => {
-        i.push(`${l}=${a}`);
-      }), e += "?" + i.join("&");
-    }
-    const n = { ...this.context.options.ajaxOptions };
-    return n.body = s, fetch(e, n);
-  }
-  async successResponse(t, e) {
-  }
-  async errorResponse(t, e) {
-  }
-  setError(t) {
-    this.error && (this.error.innerHTML = t);
-  }
-  showError() {
-    this.error && (this.error.style.display = "block");
-  }
-  hideError() {
-    this.error && (this.error.style.display = "none");
-  }
-  createElement(t) {
-    const e = document.createElement(t);
-    return e.classList.add("form-control"), this.context.options.required && (e.required = this.context.options.required), this.context.options.placeholder && (e.placeholder = this.context.options.placeholder), this.context.options.showbuttons || e.addEventListener("change", () => {
-      this.form && this.form.dispatchEvent(new Event("submit"));
-    }), this.add_focus(e), e;
-  }
-  add_focus(t) {
-    this.context.element.addEventListener("shown", function() {
-      t.focus();
-    });
-  }
-  initText() {
-    return this.context.getValue() === "" ? (this.context.element.innerHTML = this.context.options.emptytext || "", !0) : (this.context.element.innerHTML = this.context.getValue(), !1);
-  }
-  initOptions() {
-  }
-  getValue() {
-    return this.element ? this.element.value : "";
-  }
-}
-class m extends r {
-  create() {
-    const t = this.createElement("input");
-    t.type = typeof this.context.options.type == "string" ? this.context.options.type : "text";
-    const { options: e = {} } = this.context;
-    t.type = typeof e.type == "string" ? e.type : "text";
-    const s = e.attributes || {}, n = [
-      "step",
-      "min",
-      "max",
-      "minlength",
-      "maxlength",
-      "pattern",
-      "placeholder",
-      "required",
-      "readonly",
-      "disabled",
-      "autocomplete",
-      "autofocus",
-      "name",
-      "value"
-    ];
-    for (const [i, a] of Object.entries(s))
-      n.includes(i) && a !== void 0 && t.setAttribute(i, String(a));
-    return this.createContainer(t);
-  }
-}
-class x extends r {
-  create() {
-    const t = this.createElement("textarea");
-    return this.createContainer(t);
-  }
-}
-class f extends r {
-  create() {
-    const t = this.createElement("select");
-    return this.context.options.source && Array.isArray(this.context.options.source) && this.context.options.source.forEach((e) => {
-      const s = document.createElement("option");
-      s.value = e.value, s.innerHTML = e.text, t.append(s);
-    }), this.createContainer(t);
-  }
-  initText() {
-    if (this.context.element.innerHTML = this.context.options.emptytext || "", this.context.getValue() !== "" && this.context.options.source && Array.isArray(this.context.options.source) && this.context.options.source.length > 0)
-      for (let t = 0; t < this.context.options.source.length; t++) {
-        const e = this.context.options.source[t];
-        if (e.value == this.context.getValue())
-          return this.context.element.innerHTML = e.text, !1;
-      }
-    return !0;
-  }
-  initOptions() {
-    this.context.get_opt("source", []), this.context.options && typeof this.context.options.source == "string" && this.context.options.source !== "" && (this.context.options.source = JSON.parse(this.context.options.source));
-  }
-}
-class h extends r {
-  create() {
-    const t = this.createElement("input");
-    return t.type = "date", this.createContainer(t);
-  }
-  initText() {
-    const t = this.context.getValue();
-    return t === "" ? (this.context.element.innerHTML = this.context.options.emptytext || "", !0) : (this.context.element.innerHTML = t, !1);
-  }
-  initOptions() {
-    this.context.setValue(this.context.getValue());
-  }
-}
-class E extends h {
-  create() {
-    const t = this.createElement("input");
-    return t.type = "datetime-local", this.createContainer(t);
-  }
-  initOptions() {
-    this.context.setValue(this.context.getValue());
-  }
-}
-class y {
-  element;
-  options;
-  typeElement;
-  modeElement;
-  constructor(t, e = {}) {
-    this.element = t, this.options = { ...e }, this.init_options(), this.typeElement = this.route_type(), this.typeElement.initOptions(), this.modeElement = this.route_mode(), this.modeElement.init(), this.setValue(this.element.innerHTML), this.init_style(), this.options.disabled && this.disable(), this.element.dispatchEvent(new CustomEvent("init", { detail: { DarkEditable: this } }));
-  }
-  /* INIT METHODS */
-  get_opt(t, e) {
-    return this.options[t] = this.element.dataset?.[t] ?? this.options?.[t] ?? e;
-  }
-  get_opt_bool(t, e) {
-    if (this.get_opt(t, e), typeof this.options[t] != "boolean") {
-      if (this.options[t] === "true") {
-        this.options[t] = !0;
-        return;
-      }
-      if (this.options[t] === "false") {
-        this.options[t] = !1;
-        return;
-      }
-      this.options[t] = e;
-    }
-  }
-  init_options() {
-    this.get_opt("value", this.element.innerHTML), this.get_opt("name", this.element.id), this.get_opt("id", null), this.get_opt("title", ""), this.get_opt("type", "text"), this.get_opt("emptytext", "Empty"), this.get_opt("placeholder", this.element.getAttribute("placeholder")), this.get_opt("mode", "popup"), this.get_opt("url", null), this.get_opt("ajaxOptions", {}), this.options.ajaxOptions = Object.assign({
-      method: "POST",
-      dataType: "text",
-      headers: {
-        RequestVerificationToken: document.querySelector('input[name="__RequestVerificationToken"]')?.value
-      }
-    }, this.options.ajaxOptions), this.get_opt_bool("send", !0), this.get_opt_bool("disabled", !1), this.get_opt_bool("required", !1), this.get_opt_bool("showbuttons", !0), this.options?.success && typeof this.options?.success == "function" && (this.success = this.options.success), this.options?.error && typeof this.options?.error == "function" && (this.error = this.options.error), this.get_opt("attributes", {}), this.get_opt("popoverOptions", {});
-  }
-  init_text() {
-    const t = "dark-editable-element-empty";
-    this.element.classList.remove(t), this.typeElement.initText() && this.element.classList.add(t);
-  }
-  init_style() {
-    this.element.classList.add("dark-editable-element");
-  }
-  /* INIT METHODS END */
-  route_mode() {
-    switch (this.options.mode) {
-      default:
-        throw new Error(`Mode ${this.options.mode} not found!`);
-      case "popup":
-        return new d(this);
-      case "inline":
-        return new u(this);
-    }
-  }
-  route_type() {
-    if (this.options.type && typeof this.options.type != "string")
-      return new this.options.type(this);
-    switch (this.options.type) {
-      case "text":
-      case "password":
-      case "email":
-      case "url":
-      case "tel":
-      case "number":
-      case "range":
-      case "time":
-        return new m(this);
-      case "textarea":
-        return new x(this);
-      case "select":
-        return new f(this);
-      case "date":
-        return new h(this);
-      case "datetime":
-        return new E(this);
-    }
-    throw new Error("Undefined type");
-  }
-  /* AJAX */
-  async success(t, e) {
-    return await this.typeElement.successResponse(t, e);
-  }
-  async error(t, e) {
-    return await this.typeElement.errorResponse(t, e);
-  }
-  /* AJAX END */
-  /* METHODS */
-  enable() {
-    this.options.disabled = !1, this.element.classList.remove("dark-editable-element-disabled"), this.modeElement.enable();
-  }
-  disable() {
-    this.options.disabled = !0, this.element.classList.add("dark-editable-element-disabled"), this.modeElement.disable();
-  }
-  setValue(t) {
-    this.options.value = t, this.init_text();
-  }
-  getValue() {
-    return this.options.value ?? "";
-  }
-  getOption(t) {
-    return this.options[t] ?? null;
-  }
-  /* METHODS END */
-}
-export {
-  y as default
+import { Popover as e } from "bootstrap";
+import './dark-editable.css';//#region src/Modes/BaseMode.ts
+var t = class e {
+	context;
+	constructor(t) {
+		if (this.constructor === e) throw Error("It's abstract class");
+		this.context = t;
+	}
+	event_show() {
+		if (this.context.typeElement.hideError(), !this.context.typeElement.element) throw Error("Element is missing!");
+		this.context.typeElement.element.value = this.context.getValue(), this.context.element.dispatchEvent(new CustomEvent("show", { detail: { DarkEditable: this.context } }));
+	}
+	event_shown() {
+		this.context.element.dispatchEvent(new CustomEvent("shown", { detail: { DarkEditable: this.context } }));
+	}
+	event_hide() {
+		this.context.element.dispatchEvent(new CustomEvent("hide", { detail: { DarkEditable: this.context } }));
+	}
+	event_hidden() {
+		this.context.element.dispatchEvent(new CustomEvent("hidden", { detail: { DarkEditable: this.context } }));
+	}
+	init() {
+		throw Error("Method `init` not define!");
+	}
+	enable() {
+		throw Error("Method `enable` not define!");
+	}
+	disable() {
+		throw Error("Method `disable` not define!");
+	}
+	hide() {
+		throw Error("Method `hide` not define!");
+	}
+}, n = class extends t {
+	popover = null;
+	init() {
+		let t = {
+			container: "body",
+			content: this.context.typeElement.create(),
+			html: !0,
+			customClass: "dark-editable",
+			title: this.context.options.title
+		};
+		this.popover = new e(this.context.element, Object.assign(t, this.context.options.popoverOptions)), this.context.element.addEventListener("show.bs.popover", () => {
+			this.event_show();
+		}), this.context.element.addEventListener("shown.bs.popover", () => {
+			this.event_shown();
+		}), this.context.element.addEventListener("hide.bs.popover", () => {
+			this.event_hide();
+		}), this.context.element.addEventListener("hidden.bs.popover", () => {
+			this.event_hidden();
+		}), document.addEventListener("click", (e) => {
+			let t = e.target;
+			if (this.popover && t === this.popover.tip || t === this.context.element) return;
+			let n = t.parentNode;
+			for (; n;) {
+				if (n === this.popover.tip) return;
+				n = n.parentNode;
+			}
+			this.hide();
+		});
+	}
+	enable() {
+		this.popover && this.popover.enable();
+	}
+	disable() {
+		this.popover && this.popover.disable();
+	}
+	hide() {
+		this.popover && this.popover.hide();
+	}
+}, r = class extends t {
+	init() {
+		let e = () => {
+			if (!this.context.options.disabled) {
+				let t = this.context.typeElement.create();
+				this.event_show(), this.context.element.removeEventListener("click", e), this.context.element.innerHTML = "", this.context.element.append(t), this.event_shown();
+			}
+		};
+		this.context.element.addEventListener("click", e);
+	}
+	enable() {}
+	disable() {}
+	hide() {
+		this.event_hide(), this.context.element.innerHTML = this.context.getValue(), setTimeout(() => {
+			this.init(), this.event_hidden();
+		}, 100);
+	}
+}, i = class e {
+	context;
+	element = null;
+	error = null;
+	form = null;
+	load = null;
+	buttons = {
+		success: null,
+		cancel: null
+	};
+	constructor(t) {
+		if (this.constructor === e) throw Error("It's abstract class");
+		this.context = t;
+	}
+	create() {
+		throw Error("Method `create` not define!");
+	}
+	createContainer(e) {
+		let t = document.createElement("div");
+		return this.element = e, this.error = this.createContainerError(), this.form = this.createContainerForm(), this.load = this.createContainerLoad(), this.form.append(e, this.load), this.buttons.success = null, this.buttons.cancel = null, this.context.options.showbuttons && (this.buttons.success = this.createButtonSuccess(), this.buttons.cancel = this.createButtonCancel(), this.form.append(this.buttons.success, this.buttons.cancel)), t.append(this.error, this.form), t;
+	}
+	createContainerError() {
+		let e = document.createElement("div");
+		return e.classList.add("text-danger", "fst-italic", "mb-2", "fw-bold"), e.style.display = "none", e;
+	}
+	createContainerForm() {
+		let e = document.createElement("form");
+		return e.classList.add("d-flex", "align-items-start"), e.style.gap = "10px", e.addEventListener("submit", async (e) => {
+			e.preventDefault();
+			let t = this.getValue();
+			if (this.context.options.send && this.context.options.id && this.context.options.url && this.context.getValue() !== t) {
+				this.showLoad();
+				let e;
+				try {
+					let n = await this.ajax(t);
+					e = n.ok ? await this.context.success(n, t) : await this.context.error(n, t) || `${n.status} ${n.statusText}`;
+				} catch (t) {
+					console.error(t), e = t;
+				}
+				e ? (this.setError(e), this.showError()) : (this.setError(""), this.hideError(), this.context.setValue(this.getValue()), this.context.modeElement.hide(), this.initText()), this.hideLoad();
+			} else this.context.setValue(this.getValue()), this.context.modeElement.hide(), this.initText();
+			this.context.element.dispatchEvent(new CustomEvent("save", { detail: { DarkEditable: this.context } }));
+		}), e;
+	}
+	createContainerLoad() {
+		let e = document.createElement("div");
+		e.style.display = "none", e.style.position = "absolute", e.style.background = "white", e.style.width = "100%", e.style.height = "100%", e.style.top = "0", e.style.left = "0";
+		let t = document.createElement("div");
+		return t.classList.add("dark-editable-loader"), e.append(t), e;
+	}
+	createButton() {
+		let e = document.createElement("button");
+		return e.type = "button", e.classList.add("btn", "btn-sm"), e;
+	}
+	createButtonSuccess() {
+		let e = this.createButton();
+		return e.type = "submit", e.classList.add("btn-success"), e.innerHTML = "<i class=\"fa-solid fa-check\"></i>", e;
+	}
+	createButtonCancel() {
+		let e = this.createButton();
+		return e.classList.add("btn-danger"), e.innerHTML = "<i class=\"fa-solid fa-times\"></i>", e.addEventListener("click", () => {
+			this.context.modeElement.hide();
+		}), e;
+	}
+	hideLoad() {
+		this.load && (this.load.style.display = "none");
+	}
+	showLoad() {
+		this.load && (this.load.style.display = "block");
+	}
+	ajax(e) {
+		let t = this.context.options.url;
+		if (!t) throw Error("URL is required!");
+		if (!this.context.options.id) throw Error("pk is required!");
+		if (!this.context.options.name) throw Error("Name is required!");
+		let n = new FormData();
+		if (n.append("id", this.context.options.id), n.append("name", this.context.options.name), n.append("value", e), this.context.options.ajaxOptions?.method === "GET") {
+			let e = [];
+			n.forEach((t, n) => {
+				e.push(`${n}=${t}`);
+			}), t += "?" + e.join("&");
+		}
+		let r = { ...this.context.options.ajaxOptions };
+		return r.body = n, fetch(t, r);
+	}
+	async successResponse(e, t) {}
+	async errorResponse(e, t) {}
+	setError(e) {
+		this.error && (this.error.innerHTML = e);
+	}
+	showError() {
+		this.error && (this.error.style.display = "block");
+	}
+	hideError() {
+		this.error && (this.error.style.display = "none");
+	}
+	createElement(e) {
+		let t = document.createElement(e);
+		return t.classList.add("form-control"), this.context.options.required && (t.required = this.context.options.required), this.context.options.placeholder && (t.placeholder = this.context.options.placeholder), this.context.options.showbuttons || t.addEventListener("change", () => {
+			this.form && this.form.dispatchEvent(new Event("submit"));
+		}), this.add_focus(t), t;
+	}
+	add_focus(e) {
+		this.context.element.addEventListener("shown", function() {
+			e.focus();
+		});
+	}
+	initText() {
+		return this.context.getValue() === "" ? (this.context.element.innerHTML = this.context.options.emptytext || "", !0) : (this.context.element.innerHTML = this.context.getValue(), !1);
+	}
+	initOptions() {}
+	getValue() {
+		return this.element ? this.element.value : "";
+	}
+}, a = class extends i {
+	create() {
+		let e = this.createElement("input");
+		e.type = typeof this.context.options.type == "string" ? this.context.options.type : "text";
+		let { options: t = {} } = this.context;
+		e.type = typeof t.type == "string" ? t.type : "text";
+		let n = t.attributes || {}, r = [
+			"step",
+			"min",
+			"max",
+			"minlength",
+			"maxlength",
+			"pattern",
+			"placeholder",
+			"required",
+			"readonly",
+			"disabled",
+			"autocomplete",
+			"autofocus",
+			"name",
+			"value"
+		];
+		for (let [t, i] of Object.entries(n)) r.includes(t) && i !== void 0 && e.setAttribute(t, String(i));
+		return this.createContainer(e);
+	}
+}, o = class extends i {
+	create() {
+		let e = this.createElement("textarea");
+		return this.createContainer(e);
+	}
+}, s = class extends i {
+	create() {
+		let e = this.createElement("select");
+		return this.context.options.source && Array.isArray(this.context.options.source) && this.context.options.source.forEach((t) => {
+			let n = document.createElement("option");
+			n.value = t.value, n.innerHTML = t.text, e.append(n);
+		}), this.createContainer(e);
+	}
+	initText() {
+		if (this.context.element.innerHTML = this.context.options.emptytext || "", this.context.getValue() !== "" && this.context.options.source && Array.isArray(this.context.options.source) && this.context.options.source.length > 0) for (let e = 0; e < this.context.options.source.length; e++) {
+			let t = this.context.options.source[e];
+			if (t.value == this.context.getValue()) return this.context.element.innerHTML = t.text, !1;
+		}
+		return !0;
+	}
+	initOptions() {
+		this.context.get_opt("source", []), this.context.options && typeof this.context.options.source == "string" && this.context.options.source !== "" && (this.context.options.source = JSON.parse(this.context.options.source));
+	}
+}, c = class extends i {
+	create() {
+		let e = this.createElement("input");
+		return e.type = "date", this.createContainer(e);
+	}
+	initText() {
+		let e = this.context.getValue();
+		return e === "" ? (this.context.element.innerHTML = this.context.options.emptytext || "", !0) : (this.context.element.innerHTML = e, !1);
+	}
+	initOptions() {
+		this.context.setValue(this.context.getValue());
+	}
+}, l = class extends c {
+	create() {
+		let e = this.createElement("input");
+		return e.type = "datetime-local", this.createContainer(e);
+	}
+	initOptions() {
+		this.context.setValue(this.context.getValue());
+	}
+}, u = class {
+	element;
+	options;
+	typeElement;
+	modeElement;
+	constructor(e, t = {}) {
+		this.element = e, this.options = { ...t }, this.init_options(), this.typeElement = this.route_type(), this.typeElement.initOptions(), this.modeElement = this.route_mode(), this.modeElement.init(), this.setValue(this.element.innerHTML), this.init_style(), this.options.disabled && this.disable(), this.element.dispatchEvent(new CustomEvent("init", { detail: { DarkEditable: this } }));
+	}
+	get_opt(e, t) {
+		return this.options[e] = this.element.dataset?.[e] ?? this.options?.[e] ?? t;
+	}
+	get_opt_bool(e, t) {
+		if (this.get_opt(e, t), typeof this.options[e] != "boolean") {
+			if (this.options[e] === "true") {
+				this.options[e] = !0;
+				return;
+			}
+			if (this.options[e] === "false") {
+				this.options[e] = !1;
+				return;
+			}
+			this.options[e] = t;
+		}
+	}
+	init_options() {
+		this.get_opt("value", this.element.innerHTML), this.get_opt("name", this.element.id), this.get_opt("id", null), this.get_opt("title", ""), this.get_opt("type", "text"), this.get_opt("emptytext", "Empty"), this.get_opt("placeholder", this.element.getAttribute("placeholder")), this.get_opt("mode", "popup"), this.get_opt("url", null), this.get_opt("ajaxOptions", {}), this.options.ajaxOptions = Object.assign({
+			method: "POST",
+			dataType: "text",
+			headers: { RequestVerificationToken: document.querySelector("input[name=\"__RequestVerificationToken\"]")?.value }
+		}, this.options.ajaxOptions), this.get_opt_bool("send", !0), this.get_opt_bool("disabled", !1), this.get_opt_bool("required", !1), this.get_opt_bool("showbuttons", !0), this.options?.success && typeof this.options?.success == "function" && (this.success = this.options.success), this.options?.error && typeof this.options?.error == "function" && (this.error = this.options.error), this.get_opt("attributes", {}), this.get_opt("popoverOptions", {});
+	}
+	init_text() {
+		let e = "dark-editable-element-empty";
+		this.element.classList.remove(e), this.typeElement.initText() && this.element.classList.add(e);
+	}
+	init_style() {
+		this.element.classList.add("dark-editable-element");
+	}
+	route_mode() {
+		switch (this.options.mode) {
+			default: throw Error(`Mode ${this.options.mode} not found!`);
+			case "popup": return new n(this);
+			case "inline": return new r(this);
+		}
+	}
+	route_type() {
+		if (this.options.type && typeof this.options.type != "string") return new this.options.type(this);
+		switch (this.options.type) {
+			case "text":
+			case "password":
+			case "email":
+			case "url":
+			case "tel":
+			case "number":
+			case "range":
+			case "time": return new a(this);
+			case "textarea": return new o(this);
+			case "select": return new s(this);
+			case "date": return new c(this);
+			case "datetime": return new l(this);
+		}
+		throw Error("Undefined type");
+	}
+	async success(e, t) {
+		return await this.typeElement.successResponse(e, t);
+	}
+	async error(e, t) {
+		return await this.typeElement.errorResponse(e, t);
+	}
+	enable() {
+		this.options.disabled = !1, this.element.classList.remove("dark-editable-element-disabled"), this.modeElement.enable();
+	}
+	disable() {
+		this.options.disabled = !0, this.element.classList.add("dark-editable-element-disabled"), this.modeElement.disable();
+	}
+	setValue(e) {
+		this.options.value = e, this.init_text();
+	}
+	getValue() {
+		return this.options.value ?? "";
+	}
+	getOption(e) {
+		return this.options[e] ?? null;
+	}
 };
+//#endregion
+export { u as default };
+
 //# sourceMappingURL=dark-editable.js.map

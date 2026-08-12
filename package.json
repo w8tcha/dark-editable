@@ -21,9 +21,9 @@
     "@types/bootstrap": "^5.2.11",
     "@typescript/typescript6": "^6.0.2",
     "autoprefixer": "^10.5.4",
-    "postcss": "^8.5.25",
+    "postcss": "^8.5.26",
     "typescript": "^7.0.2",
-    "vite": "^8.1.5",
+    "vite": "^8.2.1",
     "vite-plugin-banner": "^0.8.1",
     "vite-plugin-dts": "^5.0.3",
     "vite-plugin-lib-inject-css": "^2.2.2"
@@ -34,7 +34,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "update-deps": "set npm_config_allow_scripts=&& npm-check -y"
   },
   "version": "2.1.7",
   "repository": {
